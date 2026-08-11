@@ -1,0 +1,40 @@
+<div class="layout">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">🚗</div>
+      <div>
+        <h2>Autoescuela CRONOS</h2>
+        <span>Gestión Académica</span>
+      </div>
+    </div>
+
+    <nav class="menu">
+      <a routerLink="/dashboard" routerLinkActive="active">Inicio</a>
+      <a routerLink="/aprendices" routerLinkActive="active">Aprendices</a>
+      <a routerLink="/instructores" routerLinkActive="active">Instructores</a>
+      <a routerLink="/cursos" routerLinkActive="active">Cursos / Paquetes</a>
+      <a routerLink="/inscripciones" routerLinkActive="active">Inscripciones</a>
+      <a routerLink="/agenda" routerLinkActive="active">Agenda</a>
+      <a routerLink="/evaluaciones" routerLinkActive="active">Evaluaciones</a>
+      <a routerLink="/reportes" routerLinkActive="active">Reportes</a>
+    </nav>
+  </aside>
+
+  <main class="content">
+    <header class="topbar">
+      <div>
+        <h1>Sistema de Gestión Académica</h1>
+        <p>Administración de aprendices, instructores, cursos, agenda y evaluaciones.</p>
+      </div>
+
+      <div class="user-box">
+        <span>Rol actual</span>
+        <strong>Administrador</strong>
+      </div>
+    </header>
+
+    <section class="page-container">
+      <router-outlet></router-outlet>
+    </section>
+  </main>
+</div>

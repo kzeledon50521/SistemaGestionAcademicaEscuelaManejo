@@ -1,0 +1,93 @@
+<div class="page-header">
+  <h2>Evaluaciones y progreso</h2>
+  <p>Registro de evaluaciones prácticas y consulta del índice de preparación del aprendiz.</p>
+</div>
+
+<div class="panel">
+  <h3>Registrar evaluación</h3>
+
+  <div class="form-grid">
+    <label>
+      Aprendiz
+      <select>
+        <option>Kendall Zeledón</option>
+        <option>José Guillén</option>
+      </select>
+    </label>
+
+    <label>
+      Instructor
+      <select>
+        <option>Cristopher Durán</option>
+        <option>María Rodríguez</option>
+      </select>
+    </label>
+
+    <label>
+      Tipo de evaluación
+      <select>
+        <option>Práctica</option>
+        <option>Teórica</option>
+      </select>
+    </label>
+
+    <label>
+      Nota
+      <input type="number" placeholder="Ej: 85">
+    </label>
+
+    <label>
+      Resultado
+      <select>
+        <option>Aprobado</option>
+        <option>Requiere refuerzo</option>
+        <option>Reprobado</option>
+      </select>
+    </label>
+
+    <label>
+      Observaciones
+      <input type="text" placeholder="Detalle de la evaluación">
+    </label>
+  </div>
+
+  <div class="actions">
+    <button>Guardar evaluación</button>
+    <button class="secondary">Limpiar</button>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>Seguimiento de aprendices</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Aprendiz</th>
+        <th>Evaluaciones</th>
+        <th>Promedio</th>
+        <th>Sesiones completadas</th>
+        <th>Índice de preparación</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Kendall Zeledón</td>
+        <td>5</td>
+        <td>88</td>
+        <td>8</td>
+        <td>82%</td>
+        <td><span class="badge active">Preparado</span></td>
+      </tr>
+      <tr>
+        <td>José Guillén</td>
+        <td>3</td>
+        <td>72</td>
+        <td>5</td>
+        <td>65%</td>
+        <td><span class="badge pending">En proceso</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,97 @@
+<div class="page-header">
+  <h2>Agenda de clases prácticas</h2>
+  <p>Consulta, reserva y administración de sesiones prácticas con instructores disponibles.</p>
+</div>
+
+<div class="panel">
+  <h3>Agendar clase práctica</h3>
+
+  <div class="form-grid">
+    <label>
+      Aprendiz
+      <select>
+        <option>Kendall Zeledón</option>
+        <option>José Guillén</option>
+      </select>
+    </label>
+
+    <label>
+      Instructor
+      <select>
+        <option>Cristopher Durán</option>
+        <option>María Rodríguez</option>
+      </select>
+    </label>
+
+    <label>
+      Zona
+      <select>
+        <option>Cartago</option>
+        <option>Tres Ríos</option>
+        <option>Paraíso</option>
+      </select>
+    </label>
+
+    <label>
+      Fecha
+      <input type="date">
+    </label>
+
+    <label>
+      Hora
+      <input type="time">
+    </label>
+
+    <label>
+      Estado
+      <select>
+        <option>Programada</option>
+        <option>Completada</option>
+        <option>Cancelada</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="actions">
+    <button>Reservar sesión</button>
+    <button class="secondary">Limpiar</button>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>Sesiones programadas</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Aprendiz</th>
+        <th>Instructor</th>
+        <th>Zona</th>
+        <th>Fecha</th>
+        <th>Hora</th>
+        <th>Estado</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Kendall Zeledón</td>
+        <td>Cristopher Durán</td>
+        <td>Cartago</td>
+        <td>12/08/2026</td>
+        <td>08:00</td>
+        <td><span class="badge active">Programada</span></td>
+        <td>Modificar / Cancelar</td>
+      </tr>
+      <tr>
+        <td>José Guillén</td>
+        <td>María Rodríguez</td>
+        <td>Tres Ríos</td>
+        <td>13/08/2026</td>
+        <td>10:00</td>
+        <td><span class="badge pending">Pendiente</span></td>
+        <td>Modificar / Cancelar</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

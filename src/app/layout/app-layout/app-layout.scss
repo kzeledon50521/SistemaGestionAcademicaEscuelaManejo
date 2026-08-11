@@ -1,0 +1,99 @@
+.layout {
+  min-height: 100vh;
+  display: flex;
+  background: #f4f6f9;
+  font-family: Arial, sans-serif;
+}
+
+.sidebar {
+  width: 270px;
+  background: #0b2d5c;
+  color: #ffffff;
+  padding: 24px 18px;
+}
+
+.brand {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 32px;
+}
+
+.brand-icon {
+  font-size: 32px;
+}
+
+.brand h2 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.brand span {
+  font-size: 13px;
+  color: #c8d6ea;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.menu a {
+  color: #dbe7f7;
+  text-decoration: none;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+.menu a:hover,
+.menu a.active {
+  background: #ffffff;
+  color: #0b2d5c;
+  font-weight: bold;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.topbar {
+  background: #ffffff;
+  padding: 22px 30px;
+  border-bottom: 1px solid #d8dee9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.topbar h1 {
+  margin: 0;
+  color: #0b2d5c;
+  font-size: 24px;
+}
+
+.topbar p {
+  margin: 6px 0 0;
+  color: #6b7280;
+}
+
+.user-box {
+  background: #eef3fb;
+  padding: 10px 16px;
+  border-radius: 8px;
+  text-align: right;
+  color: #0b2d5c;
+}
+
+.user-box span {
+  display: block;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.page-container {
+  padding: 28px;
+}

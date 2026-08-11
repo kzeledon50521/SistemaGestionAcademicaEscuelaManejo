@@ -1,0 +1,92 @@
+<div class="page-header">
+  <h2>Administración de instructores</h2>
+  <p>Registro, consulta y control de zona de trabajo, disponibilidad y estado de instructores.</p>
+</div>
+
+<div class="panel">
+  <h3>Registrar instructor</h3>
+
+  <div class="form-grid">
+    <label>
+      Cédula
+      <input type="text" placeholder="Ej: 304800591">
+    </label>
+
+    <label>
+      Nombre completo
+      <input type="text" placeholder="Nombre del instructor">
+    </label>
+
+    <label>
+      Teléfono
+      <input type="text" placeholder="Ej: 6134-9453">
+    </label>
+
+    <label>
+      Zona de trabajo
+      <select>
+        <option>Cartago</option>
+        <option>Tres Ríos</option>
+        <option>Paraíso</option>
+        <option>El Guarco</option>
+      </select>
+    </label>
+
+    <label>
+      Tipo de vehículo
+      <select>
+        <option>Manual</option>
+        <option>Automático</option>
+        <option>Manual y automático</option>
+      </select>
+    </label>
+
+    <label>
+      Estado
+      <select>
+        <option>Activo</option>
+        <option>Inactivo</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="actions">
+    <button>Guardar instructor</button>
+    <button class="secondary">Limpiar</button>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>Instructores registrados</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Cédula</th>
+        <th>Nombre</th>
+        <th>Zona</th>
+        <th>Vehículo</th>
+        <th>Disponibilidad</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>304800591</td>
+        <td>Cristopher Durán</td>
+        <td>Cartago</td>
+        <td>Manual y automático</td>
+        <td>Lunes a viernes</td>
+        <td><span class="badge active">Activo</span></td>
+      </tr>
+      <tr>
+        <td>112233445</td>
+        <td>María Rodríguez</td>
+        <td>Tres Ríos</td>
+        <td>Automático</td>
+        <td>Fines de semana</td>
+        <td><span class="badge active">Activo</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

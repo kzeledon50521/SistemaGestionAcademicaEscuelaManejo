@@ -1,0 +1,72 @@
+<div class="page-header">
+  <h2>Solicitudes de inscripción</h2>
+  <p>Gestión de solicitudes realizadas por estudiantes para ingresar a cursos o paquetes de manejo.</p>
+</div>
+
+<div class="panel">
+  <h3>Registrar solicitud de inscripción</h3>
+
+  <div class="form-grid">
+    <label>
+      Aprendiz
+      <select>
+        <option>Kendall Zeledón</option>
+        <option>José Guillén</option>
+      </select>
+    </label>
+
+    <label>
+      Curso o paquete
+      <select>
+        <option>Clase práctica individual</option>
+        <option>Clase práctica + alquiler para prueba</option>
+      </select>
+    </label>
+
+    <label>
+      Estado de solicitud
+      <select>
+        <option>Pendiente</option>
+        <option>Aprobada</option>
+        <option>Rechazada</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="actions">
+    <button>Registrar solicitud</button>
+    <button class="secondary">Limpiar</button>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>Solicitudes registradas</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Aprendiz</th>
+        <th>Curso / Paquete</th>
+        <th>Fecha solicitud</th>
+        <th>Estado</th>
+        <th>Acción administrativa</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Kendall Zeledón</td>
+        <td>Clase práctica individual</td>
+        <td>10/08/2026</td>
+        <td><span class="badge pending">Pendiente</span></td>
+        <td>Aprobar / Rechazar</td>
+      </tr>
+      <tr>
+        <td>José Guillén</td>
+        <td>Clase práctica + alquiler para prueba</td>
+        <td>10/08/2026</td>
+        <td><span class="badge active">Aprobada</span></td>
+        <td>Consulta</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

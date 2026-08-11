@@ -1,0 +1,68 @@
+<div class="page-header">
+  <h2>Reportes</h2>
+  <p>Generación de reportes de seguimiento y desempeño por aprendiz, instructor o curso.</p>
+</div>
+
+<div class="panel">
+  <h3>Filtros del reporte</h3>
+
+  <div class="form-grid">
+    <label>
+      Tipo de reporte
+      <select>
+        <option>Seguimiento por aprendiz</option>
+        <option>Desempeño por instructor</option>
+        <option>Reporte por curso</option>
+        <option>Evaluaciones realizadas</option>
+      </select>
+    </label>
+
+    <label>
+      Fecha inicial
+      <input type="date">
+    </label>
+
+    <label>
+      Fecha final
+      <input type="date">
+    </label>
+  </div>
+
+  <div class="actions">
+    <button>Generar reporte</button>
+    <button class="secondary">Exportar PDF</button>
+    <button class="secondary">Exportar Excel</button>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>Resultado del reporte</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Elemento</th>
+        <th>Detalle</th>
+        <th>Promedio</th>
+        <th>Estado</th>
+        <th>Observación</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Kendall Zeledón</td>
+        <td>Seguimiento de aprendiz</td>
+        <td>88</td>
+        <td><span class="badge active">Adecuado</span></td>
+        <td>Presenta buen avance para el examen práctico.</td>
+      </tr>
+      <tr>
+        <td>José Guillén</td>
+        <td>Seguimiento de aprendiz</td>
+        <td>72</td>
+        <td><span class="badge pending">En proceso</span></td>
+        <td>Requiere reforzar maniobras y control del vehículo.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
