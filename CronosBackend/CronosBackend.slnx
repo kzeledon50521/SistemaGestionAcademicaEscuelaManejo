@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/01 API/">
+    <Project Path="Cronos.API/Cronos.API.csproj" />
+  </Folder>
+  <Folder Name="/02 BLL y DTOs/">
+    <Project Path="Cronos.BLL/Cronos.BLL.csproj" />
+    <Project Path="Cronos.DTOs/Cronos.DTOs.csproj" />
+  </Folder>
+  <Folder Name="/03 DAL/">
+    <Project Path="Cronos.DAL/Cronos.DAL.csproj" />
+  </Folder>
+</Solution>

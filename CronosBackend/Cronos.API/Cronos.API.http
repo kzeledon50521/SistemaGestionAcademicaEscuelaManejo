@@ -1,0 +1,6 @@
+@Cronos.API_HostAddress = http://localhost:5082
+
+GET {{Cronos.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

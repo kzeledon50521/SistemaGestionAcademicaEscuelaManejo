@@ -1,0 +1,89 @@
+<div class="page-header">
+  <h2>Administración de aprendices</h2>
+  <p>Registro, consulta y control de la información académica y de contacto de los aprendices.</p>
+</div>
+
+<div class="panel">
+  <h3>Registrar aprendiz</h3>
+
+  <div class="form-grid">
+    <label>
+      Cédula *
+      <input required type="text" [(ngModel)]="aprendiz.cedula" name="cedula" placeholder="Ej: 301110111">
+    </label>
+
+    <label>
+      Nombre completo *
+      <input required type="text" [(ngModel)]="aprendiz.nombreCompleto" name="nombreCompleto"
+        placeholder="Nombre del aprendiz">
+    </label>
+
+    <label>
+      Teléfono *
+      <input required type="text" [(ngModel)]="aprendiz.telefono" name="telefono" placeholder="Ej: 8888-8888">
+    </label>
+
+    <label>
+      Correo electrónico *
+      <input required type="email" [(ngModel)]="aprendiz.correo" name="correo" placeholder="correo@ejemplo.com">
+    </label>
+
+    <label>
+      Zona *
+      <select required [(ngModel)]="aprendiz.zona" name="zona">
+        <option>Cartago</option>
+        <option>Tres Ríos</option>
+        <option>Paraíso</option>
+        <option>El Guarco</option>
+      </select>
+    </label>
+
+    <label>
+      Estado *
+      <select required [(ngModel)]="aprendiz.estado" name="estado">
+        <option>Activo</option>
+        <option>Inactivo</option>
+      </select>
+    </label>
+  </div>
+
+  <div *ngIf="mensaje" class="mensaje" [class.exito]="tipoMensaje === 'exito'" [class.error]="tipoMensaje === 'error'">
+    {{ mensaje }}
+  </div>
+
+  <div class="actions">
+    <button type="button" (click)="guardarAprendiz()">Guardar aprendiz</button>
+    <button type="button" class="secondary" (click)="limpiar()">Limpiar</button>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>Aprendices registrados</h3>
+  <input type="text" [(ngModel)]="busqueda" placeholder="Buscar por nombre o cédula">
+
+  <table>
+    <thead>
+      <tr>
+        <th>Cédula</th>
+        <th>Nombre</th>
+        <th>Teléfono</th>
+        <th>Zona</th>
+        <th>Estado</th>
+        <th>Progreso</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of aprendicesFiltrados">
+        <td>{{ item.cedula }}</td>
+        <td>{{ item.nombreCompleto }}</td>
+        <td>{{ item.telefono }}</td>
+        <td>{{ item.zona }}</td>
+        <td><span class="badge" [class.active]="item.estado === 'Activo'" [class.inactive]="item.estado === 'Inactivo'">{{ item.estado }}</span></td>
+        <td>{{ item.progreso || 0 }}%</td>
+      </tr>
+      <tr *ngIf="aprendicesFiltrados.length === 0">
+        <td colspan="6">No se encontraron registros.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
