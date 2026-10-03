@@ -1,0 +1,103 @@
+<div class="page-header">
+  <h2>Administración de instructores</h2>
+  <p>Registro, consulta y control de zona de trabajo, disponibilidad y estado de instructores.</p>
+</div>
+
+<div class="panel">
+  <h3>{{ editando ? 'Actualizar instructor' : 'Registrar instructor' }}</h3>
+
+  <div class="form-grid">
+    <label>
+      Cédula *
+      <input required type="text" [(ngModel)]="instructor.cedula" name="cedula" [disabled]="editando"
+        placeholder="Ej: 304800591">
+    </label>
+
+    <label>
+      Nombre completo *
+      <input required type="text" [(ngModel)]="instructor.nombreCompleto" name="nombreCompleto"
+        placeholder="Nombre del instructor">
+    </label>
+
+    <label>
+      Teléfono *
+      <input required type="text" [(ngModel)]="instructor.telefono" name="telefono" placeholder="Ej: 6134-9453">
+    </label>
+
+    <label>
+      Zona de trabajo *
+      <select required [(ngModel)]="instructor.zonaTrabajo" name="zonaTrabajo">
+        <option>Cartago</option>
+        <option>Tres Ríos</option>
+        <option>Paraíso</option>
+        <option>El Guarco</option>
+      </select>
+    </label>
+
+    <label>
+      Tipo de vehículo *
+      <select required [(ngModel)]="instructor.tipoVehiculo" name="tipoVehiculo">
+        <option>Manual</option>
+        <option>Automático</option>
+        <option>Manual y automático</option>
+      </select>
+    </label>
+
+    <label>
+      Disponibilidad *
+      <input required type="text" [(ngModel)]="instructor.disponibilidad" name="disponibilidad"
+        placeholder="Ej: Lunes a viernes">
+    </label>
+
+    <label>
+      Estado *
+      <select required [(ngModel)]="instructor.estado" name="estado">
+        <option>Activo</option>
+        <option>Inactivo</option>
+      </select>
+    </label>
+  </div>
+
+  <div *ngIf="mensaje" class="mensaje" [class.exito]="tipoMensaje === 'exito'" [class.error]="tipoMensaje === 'error'">
+    {{ mensaje }}
+  </div>
+
+  <div class="actions">
+    <button type="button" (click)="guardarInstructor()">{{ editando ? 'Actualizar instructor' : 'Guardar instructor'
+      }}</button>
+    <button type="button" class="secondary" (click)="limpiar()">Limpiar</button>
+  </div>
+</div>
+
+<div class="panel">
+  <h3>Instructores registrados</h3>
+  <input type="text" [(ngModel)]="busqueda" placeholder="Buscar por nombre o cédula">
+  <table>
+    <thead>
+      <tr>
+        <th>Cédula</th>
+        <th>Nombre</th>
+        <th>Zona</th>
+        <th>Vehículo</th>
+        <th>Disponibilidad</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of instructoresFiltrados">
+        <td>{{ item.cedula }}</td>
+        <td>{{ item.nombreCompleto }}</td>
+        <td>{{ item.zonaTrabajo }}</td>
+        <td>{{ item.tipoVehiculo }}</td>
+        <td>{{ item.disponibilidad }}</td>
+        <td><span class="badge" [class.active]="item.estado === 'Activo'"
+            [class.inactive]="item.estado === 'Inactivo'">{{ item.estado }}</span></td>
+        <td><button type="button" class="edit-button" (click)="editarInstructor(item)">Editar</button></td>
+      </tr>
+      <tr *ngIf="instructoresFiltrados.length === 0">
+        <td colspan="7">No se encontraron registros.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
