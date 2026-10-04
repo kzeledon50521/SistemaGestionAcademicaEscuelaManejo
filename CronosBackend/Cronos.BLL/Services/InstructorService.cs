@@ -12,7 +12,11 @@ namespace Cronos.BLL.Services
             _repository = repository;
         }
 
-       
+        public async Task<int> RegistrarInstructor(InstructorDTO instructor)
+        {
+            if (string.IsNullOrWhiteSpace(instructor.Cedula) || string.IsNullOrWhiteSpace(instructor.NombreCompleto) || string.IsNullOrWhiteSpace(instructor.Telefono) || string.IsNullOrWhiteSpace(instructor.ZonaTrabajo) || string.IsNullOrWhiteSpace(instructor.TipoVehiculo) || string.IsNullOrWhiteSpace(instructor.Disponibilidad) || string.IsNullOrWhiteSpace(instructor.Estado)) return -2;
+            return await _repository.RegistrarInstructor(instructor);
+        }
 
         public async Task<IEnumerable<InstructorDTO>> ObtenerInstructores()
         {
