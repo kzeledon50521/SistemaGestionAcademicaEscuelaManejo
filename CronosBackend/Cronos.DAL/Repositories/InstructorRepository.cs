@@ -14,7 +14,12 @@ namespace Cronos.DAL.Repositories
             _connectionString = connectionString;
         }
 
-       
+        public async Task<int> RegistrarInstructor(InstructorDTO instructor)
+        {
+            using var connection = new SqlConnection(_connectionString);
+            var parametros = new { instructor.Cedula, instructor.NombreCompleto, instructor.Telefono, instructor.ZonaTrabajo, instructor.TipoVehiculo, instructor.Disponibilidad, instructor.Estado };
+            return await connection.ExecuteScalarAsync<int>("dbo.sp_Instructor_Registrar", parametros, commandType: CommandType.StoredProcedure);
+        }
 
         public async Task<IEnumerable<InstructorDTO>> ObtenerInstructores()
         {
