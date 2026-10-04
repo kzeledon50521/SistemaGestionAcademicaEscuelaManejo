@@ -21,15 +21,7 @@ namespace Cronos.API.Controllers
             return Ok(await _service.ObtenerInstructores());
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Registrar(InstructorDTO instructor)
-        {
-            var resultado = await _service.RegistrarInstructor(instructor);
-            if (resultado == -2) return BadRequest(new { mensaje = "Debe completar todos los campos obligatorios." });
-            if (resultado == -1) return Conflict(new { mensaje = "Ya existe un instructor con esta cédula." });
-            return Ok(new { mensaje = "Instructor registrado correctamente.", idInstructor = resultado });
-        }
-
+      
         [HttpPut]
         public async Task<IActionResult> Actualizar(InstructorDTO instructor)
         {
