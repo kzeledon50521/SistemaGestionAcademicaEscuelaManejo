@@ -1,7 +1,6 @@
 ﻿using Cronos.DTOs.Models;
 using Dapper;
-using Microsoft.Data.SqlClient;
-using System.Data;
+using Npgsql;
 
 namespace Cronos.DAL.Repositories
 {
@@ -16,7 +15,7 @@ namespace Cronos.DAL.Repositories
 
         public async Task<int> RegistrarAprendiz(AprendizDTO aprendiz)
         {
-            using var connection = new SqlConnection(_connectionString);
+            using var connection = new NpgsqlConnection(_connectionString);
 
             var parametros = new
             {
@@ -29,16 +28,25 @@ namespace Cronos.DAL.Repositories
             };
 
             return await connection.ExecuteScalarAsync<int>(
-                "dbo.sp_Aprendiz_Registrar",
-                parametros,
-                commandType: CommandType.StoredProcedure
+                @"SELECT dbo.sp_aprendiz_registrar(
+                    @Cedula,
+                    @NombreCompleto,
+                    @Telefono,
+                    @Correo,
+                    @Zona,
+                    @Estado
+                );",
+                parametros
             );
         }
 
         public async Task<IEnumerable<AprendizDTO>> ObtenerAprendices()
         {
-            using var connection = new SqlConnection(_connectionString);
-            return await connection.QueryAsync<AprendizDTO>("dbo.sp_Aprendiz_Consultar", commandType: CommandType.StoredProcedure);
+            using var connection = new NpgsqlConnection(_connectionString);
+
+            return await connection.QueryAsync<AprendizDTO>(
+                "SELECT * FROM dbo.sp_aprendiz_consultar();"
+            );
         }
     }
 }
