@@ -37,33 +37,7 @@ export class Instructores {
     });
   }
 
-  guardarInstructor(): void {
-    this.mensaje = '';
-    this.tipoMensaje = '';
-
-    if (!this.instructor.cedula || !this.instructor.nombreCompleto || !this.instructor.telefono || !this.instructor.zonaTrabajo || !this.instructor.tipoVehiculo || !this.instructor.disponibilidad || !this.instructor.estado) {
-      this.mensaje = 'Debe completar todos los campos obligatorios.';
-      this.tipoMensaje = 'error';
-      return;
-    }
-
-    const solicitud = this.editando ? this.instructorService.actualizarInstructor(this.instructor) : this.instructorService.registrarInstructor(this.instructor);
-
-    solicitud.subscribe({
-      next: (respuesta) => {
-        this.limpiarFormulario();
-        this.mensaje = respuesta.mensaje;
-        this.tipoMensaje = 'exito';
-        this.obtenerInstructores();
-        this.cdr.detectChanges();
-      },
-      error: (error) => {
-        this.mensaje = error.error?.mensaje ?? 'Ocurrió un error al guardar el instructor.';
-        this.tipoMensaje = 'error';
-        this.cdr.detectChanges();
-      }
-    });
-  }
+ 
 
   editarInstructor(instructor: Instructor): void {
     this.instructor = { ...instructor };
