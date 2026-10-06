@@ -16,11 +16,6 @@ builder.Services.AddScoped<InstructorRepository>(_ =>
 
 builder.Services.AddScoped<InstructorService>();
 
-builder.Services.AddScoped<CursoRepository>(_ =>
-    new CursoRepository(connectionString));
-
-builder.Services.AddScoped<CursoService>();
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll", policy =>
