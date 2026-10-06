@@ -8,7 +8,7 @@ import { Aprendiz } from '../models/aprendiz.model';
 })
 export class AprendizService {
 
-  private apiUrl = 'https://localhost:7260/api/Aprendiz';
+  private apiUrl = 'https://cronos-api-snk9.onrender.com/api/Aprendiz';
 
   constructor(private http: HttpClient) {}
 
