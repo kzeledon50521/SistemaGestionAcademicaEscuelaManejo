@@ -27,6 +27,11 @@ export const routes: Routes = [
           import('./pages/instructores/instructores').then(m => m.Instructores)
       },
       {
+        path: 'cursos',
+        loadComponent: () =>
+          import('./pages/cursos/cursos').then(m => m.Cursos)
+      },
+      {
         path: 'inscripciones',
         loadComponent: () =>
           import('./pages/inscripciones/inscripciones').then(m => m.Inscripciones)
