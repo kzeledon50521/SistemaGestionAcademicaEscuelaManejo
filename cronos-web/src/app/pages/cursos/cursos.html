@@ -68,6 +68,7 @@
         <th>Duración</th>
         <th>Precio</th>
         <th>Estado</th>
+        <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
@@ -78,6 +79,7 @@
         <td>{{ item.duracionHoras }} h</td>
         <td>₡{{ item.precio }}</td>
         <td><span class="badge active">{{ item.estado }}</span></td>
+        <td><button type="button" class="edit-button" (click)="editarCurso(item)">Editar</button></td>
       </tr>
 
       <tr *ngIf="cursosActivos.length === 0">

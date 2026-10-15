@@ -31,7 +31,7 @@ namespace Cronos.DAL.Repositories
         {
             using var connection = new SqlConnection(_connectionString);
             var parametros = new { curso.IdCursoPaquete, curso.Nombre, curso.Descripcion, curso.TipoVehiculo, curso.DuracionHoras, curso.Precio, curso.Estado };
-            return await connection.ExecuteScalarAsync<int>("dbo.sp_CursopPaquete_Actualizar", parametros, commandType: CommandType.StoredProcedure);
+            return await connection.ExecuteScalarAsync<int>("dbo.sp_CursoPaquete_Actualizar", parametros, commandType: CommandType.StoredProcedure);
         }
     }
 }

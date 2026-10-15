@@ -18,4 +18,8 @@ export class CursoService {
   registrarCurso(curso: Curso): Observable<any> {
     return this.http.post(this.apiUrl, curso);
   }
+
+  actualizarCurso(curso: Curso): Observable<any> {
+      return this.http.put(this.apiUrl, curso);
+    }
 }
