@@ -79,5 +79,9 @@
     <Build Include="dbo\Stored Procedures\sp_Curso_Consultar.sql" />
     <Build Include="dbo\Stored Procedures\sp_Aprendiz_Registrar.sql" />
     <Build Include="dbo\Stored Procedures\sp_Aprendiz_Consultar.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Inscripcion_Registrar.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Inscripcion_Consultar.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Inscripcion_ActualizarEstado.sql" />
+    <Build Include="dbo\Stored Procedures\sp_CursoPaquete_Actualizar.sql" />
   </ItemGroup>
 </Project>
