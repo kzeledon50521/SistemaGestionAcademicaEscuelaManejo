@@ -22,5 +22,16 @@ namespace Cronos.BLL.Services
         {
             return await _repository.ObtenerCursos();
         }
+
+        public async Task<IEnumerable<CursoDTO>> ObtenerCatalogo()
+        {
+            return await _repository.ObtenerCatalogo();
+        }
+
+        public async Task<int> DeshabilitarCurso(int idCursoPaquete)
+        {
+            if (idCursoPaquete <= 0) return -1;
+            return await _repository.DeshabilitarCurso(idCursoPaquete);
+        }
     }
 }

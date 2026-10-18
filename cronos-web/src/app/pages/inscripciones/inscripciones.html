@@ -18,8 +18,8 @@
     <label>
       Curso o paquete
       <select>
-        <option>Clase práctica individual</option>
-        <option>Clase práctica + alquiler para prueba</option>
+        <option *ngFor="let item of catalogo" [value]="item.idCursoPaquete">{{ item.nombre }}</option>
+        <option *ngIf="catalogo.length === 0" disabled>No hay cursos disponibles</option>
       </select>
     </label>
 
