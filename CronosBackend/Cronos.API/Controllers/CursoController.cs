@@ -37,5 +37,20 @@ namespace Cronos.API.Controllers
             if (resultado <= 0) return NotFound(new { mensaje = "Curso no encontrado." });
             return Ok(new { mensaje = "Curso actualizado correctamente." });
         }
+
+        [HttpGet("catalogo")]
+        public async Task<IActionResult> ObtenerCatalogo()
+        {
+            return Ok(await _service.ObtenerCatalogo());
+        }
+
+        [HttpPut("{id}/deshabilitar")]
+        public async Task<IActionResult> Deshabilitar(int id)
+        {
+            var resultado = await _service.DeshabilitarCurso(id);
+            if (resultado == -1) return BadRequest(new { mensaje = "El identificador del curso no es válido." });
+            if (resultado <= 0) return NotFound(new { mensaje = "Curso no encontrado o ya se encuentra inactivo." });
+            return Ok(new { mensaje = "Curso deshabilitado correctamente." });
+        }
     }
 }

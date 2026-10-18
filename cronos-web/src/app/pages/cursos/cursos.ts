@@ -13,13 +13,12 @@ import { CursoService } from '../../services/curso.service';
 export class Cursos {
   curso: Curso = this.nuevoCurso();
   cursos: Curso[] = [];
-
-  get cursosActivos(): Curso[] {
-    return this.cursos.filter(item => item.estado === 'Activo');
-  }
   mensaje = '';
   tipoMensaje: 'exito' | 'error' | '' = '';
+  mensajeListado = '';
+  tipoMensajeListado: 'exito' | 'error' | '' = '';
   editando = false;
+
   constructor(private cursoService: CursoService, private cdr: ChangeDetectorRef) {
     this.obtenerCursos();
   }
@@ -63,6 +62,28 @@ export class Cursos {
     
   }
 
+  deshabilitarCurso(item: Curso): void {
+    this.mensajeListado = '';
+    this.tipoMensajeListado = '';
+
+    if (!item.idCursoPaquete || item.estado !== 'Activo') return;
+
+    if (!confirm(`¿Desea deshabilitar el curso "${item.nombre}"? No estará disponible para nuevas inscripciones, pero se conservará su historial.`)) return;
+
+    this.cursoService.deshabilitarCurso(item.idCursoPaquete).subscribe({
+      next: (respuesta) => {
+        this.mensajeListado = respuesta.mensaje;
+        this.tipoMensajeListado = 'exito';
+        this.obtenerCursos();
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        this.mensajeListado = error.error?.mensaje ?? 'Ocurrió un error al deshabilitar el curso.';
+        this.tipoMensajeListado = 'error';
+        this.cdr.detectChanges();
+      }
+    });
+  }
 
   limpiar(): void {
     this.limpiarFormulario();

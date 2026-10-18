@@ -22,4 +22,12 @@ export class CursoService {
   actualizarCurso(curso: Curso): Observable<any> {
       return this.http.put(this.apiUrl, curso);
     }
+
+  obtenerCatalogo(): Observable<Curso[]> {
+    return this.http.get<Curso[]>(`${this.apiUrl}/catalogo`);
+  }
+
+  deshabilitarCurso(idCursoPaquete: number): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${idCursoPaquete}/deshabilitar`, {});
+  }
 }
