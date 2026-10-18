@@ -102,3 +102,19 @@ td {
   background: #fef3c7;
   color: #92400e;
 }
+
+.mensaje {
+  margin-top: 16px;
+  padding: 10px 12px;
+  border-radius: 6px;
+}
+
+.mensaje.exito {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.mensaje.error {
+  background: #fee2e2;
+  color: #991b1b;
+}

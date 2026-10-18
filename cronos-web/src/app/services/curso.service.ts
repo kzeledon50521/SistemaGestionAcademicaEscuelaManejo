@@ -19,6 +19,10 @@ export class CursoService {
     return this.http.post(this.apiUrl, curso);
   }
 
+  actualizarCurso(curso: Curso): Observable<any> {
+      return this.http.put(this.apiUrl, curso);
+    }
+
   obtenerCatalogo(): Observable<Curso[]> {
     return this.http.get<Curso[]>(`${this.apiUrl}/catalogo`);
   }

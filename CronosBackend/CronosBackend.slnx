@@ -9,4 +9,8 @@
   <Folder Name="/03 DAL/">
     <Project Path="Cronos.DAL/Cronos.DAL.csproj" />
   </Folder>
+  <Project Path="Cronos.Database/Cronos.Database.sqlproj" Id="4853c670-37b5-48be-83e3-762f9b24173f">
+    <Build />
+    <Deploy />
+  </Project>
 </Solution>
