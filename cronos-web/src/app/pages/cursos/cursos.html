@@ -68,21 +68,33 @@
         <th>Duración</th>
         <th>Precio</th>
         <th>Estado</th>
+        <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let item of cursosActivos">
+      <tr *ngFor="let item of cursos">
         <td>{{ item.nombre }}</td>
         <td>{{ item.descripcion }}</td>
         <td>{{ item.tipoVehiculo }}</td>
         <td>{{ item.duracionHoras }} h</td>
         <td>₡{{ item.precio }}</td>
-        <td><span class="badge active">{{ item.estado }}</span></td>
+        <td><span class="badge" [class.active]="item.estado === 'Activo'"
+            [class.inactive]="item.estado === 'Inactivo'">{{ item.estado }}</span></td>
+        <td>
+          <button *ngIf="item.estado === 'Activo'; else sinAccion" type="button" class="danger"
+            (click)="deshabilitarCurso(item)">Deshabilitar</button>
+          <ng-template #sinAccion>—</ng-template>
+        </td>
       </tr>
 
-      <tr *ngIf="cursosActivos.length === 0">
-        <td colspan="6">Actualmente no hay cursos activos.</td>
+      <tr *ngIf="cursos.length === 0">
+        <td colspan="7">No hay cursos registrados.</td>
       </tr>
     </tbody>
   </table>
+
+  <div *ngIf="mensajeListado" class="mensaje" [class.exito]="tipoMensajeListado === 'exito'"
+    [class.error]="tipoMensajeListado === 'error'">
+    {{ mensajeListado }}
+  </div>
 </div>

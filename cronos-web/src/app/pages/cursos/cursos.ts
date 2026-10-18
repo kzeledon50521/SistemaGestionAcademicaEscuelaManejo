@@ -13,12 +13,10 @@ import { CursoService } from '../../services/curso.service';
 export class Cursos {
   curso: Curso = this.nuevoCurso();
   cursos: Curso[] = [];
-
-  get cursosActivos(): Curso[] {
-    return this.cursos.filter(item => item.estado === 'Activo');
-  }
   mensaje = '';
   tipoMensaje: 'exito' | 'error' | '' = '';
+  mensajeListado = '';
+  tipoMensajeListado: 'exito' | 'error' | '' = '';
 
   constructor(private cursoService: CursoService, private cdr: ChangeDetectorRef) {
     this.obtenerCursos();
@@ -54,6 +52,29 @@ export class Cursos {
       error: (error) => {
         this.mensaje = error.error?.mensaje ?? 'Ocurrió un error al registrar el curso.';
         this.tipoMensaje = 'error';
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  deshabilitarCurso(item: Curso): void {
+    this.mensajeListado = '';
+    this.tipoMensajeListado = '';
+
+    if (!item.idCursoPaquete || item.estado !== 'Activo') return;
+
+    if (!confirm(`¿Desea deshabilitar el curso "${item.nombre}"? No estará disponible para nuevas inscripciones, pero se conservará su historial.`)) return;
+
+    this.cursoService.deshabilitarCurso(item.idCursoPaquete).subscribe({
+      next: (respuesta) => {
+        this.mensajeListado = respuesta.mensaje;
+        this.tipoMensajeListado = 'exito';
+        this.obtenerCursos();
+        this.cdr.detectChanges();
+      },
+      error: (error) => {
+        this.mensajeListado = error.error?.mensaje ?? 'Ocurrió un error al deshabilitar el curso.';
+        this.tipoMensajeListado = 'error';
         this.cdr.detectChanges();
       }
     });

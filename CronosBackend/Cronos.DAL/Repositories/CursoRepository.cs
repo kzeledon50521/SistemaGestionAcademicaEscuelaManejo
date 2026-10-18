@@ -26,5 +26,18 @@ namespace Cronos.DAL.Repositories
             using var connection = new SqlConnection(_connectionString);
             return await connection.QueryAsync<CursoDTO>("dbo.sp_Curso_Consultar", commandType: CommandType.StoredProcedure);
         }
+
+        public async Task<IEnumerable<CursoDTO>> ObtenerCatalogo()
+        {
+            using var connection = new SqlConnection(_connectionString);
+            return await connection.QueryAsync<CursoDTO>("dbo.sp_Curso_ConsultarCatalogo", commandType: CommandType.StoredProcedure);
+        }
+
+        public async Task<int> DeshabilitarCurso(int idCursoPaquete)
+        {
+            using var connection = new SqlConnection(_connectionString);
+            var parametros = new { IdCursoPaquete = idCursoPaquete };
+            return await connection.ExecuteScalarAsync<int>("dbo.sp_Curso_Deshabilitar", parametros, commandType: CommandType.StoredProcedure);
+        }
     }
 }
