@@ -29,6 +29,15 @@ namespace Cronos.API.Controllers
             return Ok(new { mensaje = "Curso registrado correctamente.", idCursoPaquete = resultado });
         }
 
+        [HttpPut]
+        public async Task<IActionResult> Actualizar(CursoDTO curso)
+        {
+            var resultado = await _service.ActualizarCurso(curso);
+            if (resultado == -2) return BadRequest(new { mensaje = "Debe completar todos los campos obligatorios." });
+            if (resultado <= 0) return NotFound(new { mensaje = "Curso no encontrado." });
+            return Ok(new { mensaje = "Curso actualizado correctamente." });
+        }
+
         [HttpGet("catalogo")]
         public async Task<IActionResult> ObtenerCatalogo()
         {

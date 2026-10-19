@@ -9,33 +9,39 @@
   <div class="form-grid">
     <label>
       Aprendiz
-      <select>
-        <option>Kendall Zeledón</option>
-        <option>José Guillén</option>
+      <select [(ngModel)]="inscripcion.idAprendiz">
+        <option [ngValue]="0">Seleccione un aprendiz</option>
+
+        <option *ngFor="let aprendiz of aprendices" [ngValue]="aprendiz.idAprendiz">
+          {{ aprendiz.nombreCompleto }}
+        </option>
       </select>
     </label>
 
     <label>
       Curso o paquete
-      <select>
-        <option *ngFor="let item of catalogo" [value]="item.idCursoPaquete">{{ item.nombre }}</option>
-        <option *ngIf="catalogo.length === 0" disabled>No hay cursos disponibles</option>
+      <select [(ngModel)]="inscripcion.idCursoPaquete">
+        <option [ngValue]="0">Seleccione un curso</option>
+
+        <option *ngFor="let curso of cursosDisponibles" [ngValue]="curso.idCursoPaquete">
+          {{ curso.nombre }}
+        </option>
       </select>
     </label>
 
     <label>
       Estado de solicitud
-      <select>
-        <option>Pendiente</option>
-        <option>Aprobada</option>
-        <option>Rechazada</option>
-      </select>
+      <input type="text" value="Pendiente" disabled>
     </label>
   </div>
 
+  <div *ngIf="mensaje" class="mensaje" [class.exito]="tipoMensaje === 'exito'" [class.error]="tipoMensaje === 'error'">
+    {{ mensaje }}
+  </div>
+
   <div class="actions">
-    <button>Registrar solicitud</button>
-    <button class="secondary">Limpiar</button>
+    <button type="button" (click)="registrar()">Registrar solicitud</button>
+    <button type="button" class="secondary" (click)="limpiar()">Limpiar</button>
   </div>
 </div>
 
@@ -49,23 +55,36 @@
         <th>Curso / Paquete</th>
         <th>Fecha solicitud</th>
         <th>Estado</th>
-        <th>Acción administrativa</th>
+        <th>Acciones</th>
       </tr>
     </thead>
+
     <tbody>
-      <tr>
-        <td>Kendall Zeledón</td>
-        <td>Clase práctica individual</td>
-        <td>10/08/2026</td>
-        <td><span class="badge pending">Pendiente</span></td>
-        <td>Aprobar / Rechazar</td>
+      <tr *ngFor="let solicitud of inscripciones">
+        <td>{{ solicitud.nombreAprendiz }}</td>
+        <td>{{ solicitud.nombreCurso }}</td>
+        <td>{{ solicitud.fechaSolicitud | date:'dd/MM/yyyy' }}</td>
+        <td>
+          <span class="badge" [class.pending]="solicitud.estadoSolicitud === 'Pendiente'"
+            [class.active]="solicitud.estadoSolicitud === 'Aprobada'">
+            {{ solicitud.estadoSolicitud }}
+          </span>
+        </td>
+        <td>
+          <ng-container *ngIf="solicitud.estadoSolicitud === 'Pendiente'">
+            <button type="button" (click)="aprobar(solicitud)">
+              Aprobar
+            </button>
+
+            <button type="button" class="secondary" (click)="rechazar(solicitud)">
+              Rechazar
+            </button>
+          </ng-container>
+        </td>
       </tr>
-      <tr>
-        <td>José Guillén</td>
-        <td>Clase práctica + alquiler para prueba</td>
-        <td>10/08/2026</td>
-        <td><span class="badge active">Aprobada</span></td>
-        <td>Consulta</td>
+
+      <tr *ngIf="inscripciones.length === 0">
+        <td colspan="5">No se encontraron solicitudes.</td>
       </tr>
     </tbody>
   </table>

@@ -81,9 +81,9 @@
         <td><span class="badge" [class.active]="item.estado === 'Activo'"
             [class.inactive]="item.estado === 'Inactivo'">{{ item.estado }}</span></td>
         <td>
-          <button *ngIf="item.estado === 'Activo'; else sinAccion" type="button" class="danger"
+          <button type="button" class="edit-button" (click)="editarCurso(item)">Editar</button>
+          <button *ngIf="item.estado === 'Activo'" type="button" class="danger"
             (click)="deshabilitarCurso(item)">Deshabilitar</button>
-          <ng-template #sinAccion>—</ng-template>
         </td>
       </tr>
 
