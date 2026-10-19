@@ -20,7 +20,10 @@ builder.Services.AddScoped<InscripcionService>();
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("Angular", policy => policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod());
+    options.AddPolicy("AllowAll", policy =>
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod());
 });
 
 // Add services to the container.
@@ -37,9 +40,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
-
-app.UseCors("Angular");
+app.UseCors("AllowAll");
 
 app.UseAuthorization();
 

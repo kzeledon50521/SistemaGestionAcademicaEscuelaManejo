@@ -7,7 +7,7 @@ import { Curso } from '../models/curso.model';
   providedIn: 'root'
 })
 export class CursoService {
-  private apiUrl = 'https://localhost:7260/api/Curso';
+  private apiUrl = 'https://cronos-api-snk9.onrender.com/api/Curso';
 
   constructor(private http: HttpClient) {}
 

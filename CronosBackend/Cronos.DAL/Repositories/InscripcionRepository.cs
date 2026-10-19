@@ -1,7 +1,6 @@
 ﻿using Cronos.DTOs.Models;
 using Dapper;
-using Microsoft.Data.SqlClient;
-using System.Data;
+using Npgsql;
 
 namespace Cronos.DAL.Repositories
 {
@@ -16,7 +15,7 @@ namespace Cronos.DAL.Repositories
 
         public async Task<int> RegistrarInscripcion(InscripcionDTO inscripcion)
         {
-            using var connection = new SqlConnection(_connectionString);
+            using var connection = new NpgsqlConnection(_connectionString);
 
             var parametros = new
             {
@@ -25,25 +24,26 @@ namespace Cronos.DAL.Repositories
             };
 
             return await connection.ExecuteScalarAsync<int>(
-                "dbo.sp_Inscripcion_Registrar",
-                parametros,
-                commandType: CommandType.StoredProcedure
-            );
+    @"SELECT dbo.sp_inscripcion_registrar(
+        @IdAprendiz,
+        @IdCursoPaquete
+    );",
+    parametros
+);
         }
 
         public async Task<IEnumerable<InscripcionDTO>> ObtenerInscripciones()
         {
-            using var connection = new SqlConnection(_connectionString);
+            using var connection = new NpgsqlConnection(_connectionString);
 
             return await connection.QueryAsync<InscripcionDTO>(
-                "dbo.sp_Inscripcion_Consultar",
-                commandType: CommandType.StoredProcedure
-            );
+     "SELECT * FROM dbo.sp_inscripcion_consultar();"
+ );
         }
 
         public async Task<int> ActualizarEstado(int idInscripcion, string estadoSolicitud)
         {
-            using var connection = new SqlConnection(_connectionString);
+            using var connection = new NpgsqlConnection(_connectionString);
 
             var parametros = new
             {
@@ -52,10 +52,12 @@ namespace Cronos.DAL.Repositories
             };
 
             return await connection.ExecuteScalarAsync<int>(
-                "dbo.sp_Inscripcion_ActualizarEstado",
-                parametros,
-                commandType: CommandType.StoredProcedure
-            );
+    @"SELECT dbo.sp_inscripcion_actualizarestado(
+        @IdInscripcion,
+        @EstadoSolicitud
+    );",
+    parametros
+);
         }
     }
 }
