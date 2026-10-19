@@ -17,6 +17,7 @@ export class Cursos {
   tipoMensaje: 'exito' | 'error' | '' = '';
   mensajeListado = '';
   tipoMensajeListado: 'exito' | 'error' | '' = '';
+  editando = false;
 
   constructor(private cursoService: CursoService, private cdr: ChangeDetectorRef) {
     this.obtenerCursos();
@@ -41,20 +42,24 @@ export class Cursos {
       return;
     }
 
-    this.cursoService.registrarCurso(this.curso).subscribe({
+    const solicitud = this.editando ? this.cursoService.actualizarCurso(this.curso) : this.cursoService.registrarCurso(this.curso);
+
+    solicitud.subscribe({
       next: (respuesta) => {
-        this.curso = this.nuevoCurso();
+        this.limpiarFormulario();
         this.mensaje = respuesta.mensaje;
         this.tipoMensaje = 'exito';
         this.obtenerCursos();
         this.cdr.detectChanges();
       },
       error: (error) => {
-        this.mensaje = error.error?.mensaje ?? 'Ocurrió un error al registrar el curso.';
+        this.mensaje = error.error?.mensaje ?? 'Ocurrió un error al guardar el curso.';
         this.tipoMensaje = 'error';
         this.cdr.detectChanges();
       }
     });
+
+    
   }
 
   deshabilitarCurso(item: Curso): void {
@@ -81,12 +86,25 @@ export class Cursos {
   }
 
   limpiar(): void {
-    this.curso = this.nuevoCurso();
+    this.limpiarFormulario();
     this.mensaje = '';
     this.tipoMensaje = '';
+  }
+
+  private limpiarFormulario(): void {
+    this.curso = this.nuevoCurso();
+    this.editando = false;
   }
 
   private nuevoCurso(): Curso {
     return { nombre: '', descripcion: '', tipoVehiculo: 'Manual', duracionHoras: 0, precio: 0, estado: 'Activo' };
   }
+
+  editarCurso(curso: Curso): void {
+      this.curso = { ...curso };
+      this.editando = true;
+      this.mensaje = '';
+      this.tipoMensaje = '';
+    }
 }
+

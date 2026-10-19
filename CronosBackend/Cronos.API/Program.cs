@@ -13,6 +13,10 @@ builder.Services.AddScoped<InstructorRepository>(_ => new InstructorRepository(c
 builder.Services.AddScoped<InstructorService>();
 builder.Services.AddScoped<CursoRepository>(_ => new CursoRepository(connectionString));
 builder.Services.AddScoped<CursoService>();
+builder.Services.AddScoped<InscripcionRepository>(_ =>
+    new InscripcionRepository(connectionString));
+
+builder.Services.AddScoped<InscripcionService>();
 
 builder.Services.AddCors(options =>
 {

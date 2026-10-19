@@ -23,6 +23,12 @@ namespace Cronos.BLL.Services
             return await _repository.ObtenerCursos();
         }
 
+        public async Task<int> ActualizarCurso(CursoDTO curso)
+        {
+            if (string.IsNullOrWhiteSpace(curso.Nombre) || string.IsNullOrWhiteSpace(curso.TipoVehiculo) || curso.DuracionHoras <= 0 || curso.Precio <= 0 || string.IsNullOrWhiteSpace(curso.Estado)) return -1;
+            return await _repository.ActualizarCurso(curso);
+        }
+
         public async Task<IEnumerable<CursoDTO>> ObtenerCatalogo()
         {
             return await _repository.ObtenerCatalogo();
