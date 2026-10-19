@@ -8,7 +8,7 @@ import { Inscripcion } from '../models/inscripcion.model';
 })
 export class InscripcionService {
 
-    private apiUrl = 'https://localhost:7260/api/Inscripcion';
+    private apiUrl = 'https://cronos-api-snk9.onrender.com/api/Inscripcion';
 
     constructor(private http: HttpClient) { }
 
