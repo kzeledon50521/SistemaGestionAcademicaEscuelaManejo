@@ -103,6 +103,11 @@ td {
   color: #166534;
 }
 
+.badge.inactive {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
 .mensaje {
   margin-top: 16px;
   padding: 10px 12px;
@@ -120,7 +125,24 @@ td {
   color: #166534;
 }
 
-.badge.inactive {
-  background: #fee2e2;
-  color: #991b1b;
+.filter-row th {
+  padding: 6px;
+}
+
+.filter-row input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: default;
 }

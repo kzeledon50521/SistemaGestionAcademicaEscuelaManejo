@@ -9,18 +9,33 @@
   <div class="form-grid">
     <label>
       Aprendiz
-      <select>
-        <option>Kendall Zeledón</option>
-        <option>José Guillén</option>
-      </select>
+
+      <div class="searchable-select" (click)="$event.stopPropagation()">
+        <input type="text" [(ngModel)]="busquedaAprendiz" (focus)="mostrarAprendices = true"
+          placeholder="Seleccione o busque un aprendiz" autocomplete="off">
+
+        <div class="searchable-options" *ngIf="mostrarAprendices">
+          <button type="button" *ngFor="let aprendiz of aprendicesFiltrados" (click)="seleccionarAprendiz(aprendiz)">
+            {{ aprendiz }}
+          </button>
+        </div>
+      </div>
     </label>
 
     <label>
       Instructor
-      <select>
-        <option>Cristopher Durán</option>
-        <option>María Rodríguez</option>
-      </select>
+
+      <div class="searchable-select" (click)="$event.stopPropagation()">
+        <input type="text" [(ngModel)]="busquedaInstructor" (focus)="mostrarInstructores = true"
+          placeholder="Seleccione o busque un instructor" autocomplete="off">
+
+        <div class="searchable-options" *ngIf="mostrarInstructores">
+          <button type="button" *ngFor="let instructor of instructoresFiltrados"
+            (click)="seleccionarInstructor(instructor)">
+            {{ instructor }}
+          </button>
+        </div>
+      </div>
     </label>
 
     <label>
@@ -34,7 +49,7 @@
 
     <label>
       Fecha
-      <input type="date">
+      <input type="date" [min]="fechaMinima">
     </label>
 
     <label>
@@ -64,34 +79,67 @@
   <table>
     <thead>
       <tr>
-        <th>Aprendiz</th>
-        <th>Instructor</th>
-        <th>Zona</th>
-        <th>Fecha</th>
-        <th>Hora</th>
-        <th>Estado</th>
-        <th>Acción</th>
+        <th (click)="ordenar('aprendiz')">Aprendiz ↕</th>
+        <th (click)="ordenar('instructor')">Instructor ↕</th>
+        <th (click)="ordenar('zona')">Zona ↕</th>
+        <th (click)="ordenar('fecha')">Fecha ↕</th>
+        <th (click)="ordenar('hora')">Hora ↕</th>
+        <th (click)="ordenar('estado')">Estado ↕</th>
+        <th (click)="ordenar('accion')">Acción ↕</th>
+      </tr>
+
+      <tr class="filter-row">
+        <th><input [(ngModel)]="filtros.aprendiz" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.instructor" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.zona" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.fecha" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.hora" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.estado" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.accion" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
       </tr>
     </thead>
+
     <tbody>
-      <tr>
-        <td>Kendall Zeledón</td>
-        <td>Cristopher Durán</td>
-        <td>Cartago</td>
-        <td>12/08/2026</td>
-        <td>08:00</td>
-        <td><span class="badge active">Programada</span></td>
-        <td>Modificar / Cancelar</td>
+      <tr *ngFor="let sesion of sesionesPaginadas">
+        <td>{{ sesion.aprendiz }}</td>
+        <td>{{ sesion.instructor }}</td>
+        <td>{{ sesion.zona }}</td>
+        <td>{{ sesion.fecha }}</td>
+        <td>{{ sesion.hora }}</td>
+        <td>
+          <span class="badge" [class.active]="sesion.estado === 'Programada'"
+            [class.pending]="sesion.estado === 'Pendiente'">
+            {{ sesion.estado }}
+          </span>
+        </td>
+        <td>
+  <div class="table-actions">
+    <button type="button" class="action-button primary">
+      Modificar
+    </button>
+
+    <button type="button" class="action-button danger">
+      Cancelar
+    </button>
+  </div>
+</td>
       </tr>
-      <tr>
-        <td>José Guillén</td>
-        <td>María Rodríguez</td>
-        <td>Tres Ríos</td>
-        <td>13/08/2026</td>
-        <td>10:00</td>
-        <td><span class="badge pending">Pendiente</span></td>
-        <td>Modificar / Cancelar</td>
+
+      <tr *ngIf="sesionesFiltradas.length === 0">
+        <td colspan="7">No se encontraron sesiones.</td>
       </tr>
     </tbody>
   </table>
+
+  <div class="pagination" *ngIf="sesionesFiltradas.length > 0">
+    <button type="button" class="secondary" (click)="paginaAnterior()" [disabled]="paginaActual === 1">
+      Anterior
+    </button>
+
+    <span>Página {{ paginaActual }} de {{ totalPaginas }}</span>
+
+    <button type="button" class="secondary" (click)="paginaSiguiente()" [disabled]="paginaActual === totalPaginas">
+      Siguiente
+    </button>
+  </div>
 </div>

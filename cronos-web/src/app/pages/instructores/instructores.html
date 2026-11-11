@@ -63,41 +63,78 @@
   </div>
 
   <div class="actions">
-    <button type="button" (click)="guardarInstructor()">{{ editando ? 'Actualizar instructor' : 'Guardar instructor'
-      }}</button>
+    <button type="button" (click)="guardarInstructor()">
+      {{ editando ? 'Actualizar instructor' : 'Guardar instructor' }}
+    </button>
     <button type="button" class="secondary" (click)="limpiar()">Limpiar</button>
   </div>
 </div>
 
 <div class="panel">
   <h3>Instructores registrados</h3>
-  <input type="text" [(ngModel)]="busqueda" placeholder="Buscar por nombre o cédula">
+
+  <div class="search-field">
+    <input type="text" [(ngModel)]="busqueda" (ngModelChange)="paginaActual = 1"
+      placeholder="Buscar por nombre o cédula">
+  </div>
+
   <table>
     <thead>
       <tr>
-        <th>Cédula</th>
-        <th>Nombre</th>
-        <th>Zona</th>
-        <th>Vehículo</th>
-        <th>Disponibilidad</th>
-        <th>Estado</th>
+        <th (click)="ordenar('cedula')">Cédula ↕</th>
+        <th (click)="ordenar('nombreCompleto')">Nombre ↕</th>
+        <th (click)="ordenar('zonaTrabajo')">Zona ↕</th>
+        <th (click)="ordenar('tipoVehiculo')">Vehículo ↕</th>
+        <th (click)="ordenar('disponibilidad')">Disponibilidad ↕</th>
+        <th (click)="ordenar('estado')">Estado ↕</th>
         <th>Acciones</th>
       </tr>
+
+      <tr class="filter-row">
+        <th><input [(ngModel)]="filtros.cedula" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.nombreCompleto" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.zonaTrabajo" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.tipoVehiculo" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.disponibilidad" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.estado" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th></th>
+      </tr>
     </thead>
+
     <tbody>
-      <tr *ngFor="let item of instructoresFiltrados">
+      <tr *ngFor="let item of instructoresPaginados">
         <td>{{ item.cedula }}</td>
         <td>{{ item.nombreCompleto }}</td>
         <td>{{ item.zonaTrabajo }}</td>
         <td>{{ item.tipoVehiculo }}</td>
         <td>{{ item.disponibilidad }}</td>
-        <td><span class="badge" [class.active]="item.estado === 'Activo'"
-            [class.inactive]="item.estado === 'Inactivo'">{{ item.estado }}</span></td>
-        <td><button type="button" class="edit-button" (click)="editarInstructor(item)">Editar</button></td>
+        <td>
+          <span class="badge" [class.active]="item.estado === 'Activo'" [class.inactive]="item.estado === 'Inactivo'">
+            {{ item.estado }}
+          </span>
+        </td>
+        <td>
+          <button type="button" class="action-button primary" (click)="editarInstructor(item)">
+            Editar
+          </button>
+        </td>
       </tr>
+
       <tr *ngIf="instructoresFiltrados.length === 0">
         <td colspan="7">No se encontraron registros.</td>
       </tr>
     </tbody>
   </table>
+
+  <div class="pagination" *ngIf="instructoresFiltrados.length > 0">
+    <button type="button" class="secondary" (click)="paginaAnterior()" [disabled]="paginaActual === 1">
+      Anterior
+    </button>
+
+    <span>Página {{ paginaActual }} de {{ totalPaginas }}</span>
+
+    <button type="button" class="secondary" (click)="paginaSiguiente()" [disabled]="paginaActual === totalPaginas">
+      Siguiente
+    </button>
+  </div>
 </div>

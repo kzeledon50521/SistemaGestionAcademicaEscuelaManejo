@@ -15,11 +15,88 @@ export class Aprendices {
   aprendices: Aprendiz[] = [];
   busqueda = '';
 
+  filtros = {
+    cedula: '',
+    nombreCompleto: '',
+    telefono: '',
+    zona: '',
+    estado: '',
+    progreso: ''
+  };
+
+  ordenCampo: keyof Aprendiz | '' = '';
+  ordenAscendente = true;
+
+  paginaActual = 1;
+  tamanoPagina = 5;
+
   get aprendicesFiltrados(): Aprendiz[] {
     const texto = this.busqueda.trim().toLowerCase();
-    if (!texto) return this.aprendices;
-    return this.aprendices.filter(item => item.nombreCompleto.toLowerCase().includes(texto) || item.cedula.toLowerCase().includes(texto));
+
+    let resultado = this.aprendices.filter(item =>
+      (!texto ||
+        item.nombreCompleto.toLowerCase().includes(texto) ||
+        item.cedula.toLowerCase().includes(texto)) &&
+      item.cedula.toLowerCase().includes(this.filtros.cedula.toLowerCase()) &&
+      item.nombreCompleto.toLowerCase().includes(this.filtros.nombreCompleto.toLowerCase()) &&
+      item.telefono.toLowerCase().includes(this.filtros.telefono.toLowerCase()) &&
+      item.zona.toLowerCase().includes(this.filtros.zona.toLowerCase()) &&
+      item.estado.toLowerCase().includes(this.filtros.estado.toLowerCase()) &&
+      String(item.progreso ?? 0).includes(this.filtros.progreso)
+    );
+
+    if (this.ordenCampo) {
+      const campo = this.ordenCampo;
+
+      resultado = [...resultado].sort((a, b) => {
+        const valorA = a[campo] ?? '';
+        const valorB = b[campo] ?? '';
+
+        const comparacion = String(valorA).localeCompare(
+          String(valorB),
+          'es',
+          { numeric: true, sensitivity: 'base' }
+        );
+
+        return this.ordenAscendente ? comparacion : -comparacion;
+      });
+    }
+
+    return resultado;
   }
+
+  get aprendicesPaginados(): Aprendiz[] {
+    const inicio = (this.paginaActual - 1) * this.tamanoPagina;
+    return this.aprendicesFiltrados.slice(inicio, inicio + this.tamanoPagina);
+  }
+
+  get totalPaginas(): number {
+    return Math.max(1, Math.ceil(this.aprendicesFiltrados.length / this.tamanoPagina));
+  }
+
+  ordenar(campo: keyof Aprendiz): void {
+    if (this.ordenCampo === campo) {
+      this.ordenAscendente = !this.ordenAscendente;
+    } else {
+      this.ordenCampo = campo;
+      this.ordenAscendente = true;
+    }
+
+    this.paginaActual = 1;
+  }
+
+  paginaAnterior(): void {
+    if (this.paginaActual > 1) {
+      this.paginaActual--;
+    }
+  }
+
+  paginaSiguiente(): void {
+    if (this.paginaActual < this.totalPaginas) {
+      this.paginaActual++;
+    }
+  }
+
   mensaje = '';
   tipoMensaje: 'exito' | 'error' | '' = '';
 

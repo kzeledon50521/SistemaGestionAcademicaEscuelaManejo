@@ -9,18 +9,33 @@
   <div class="form-grid">
     <label>
       Aprendiz
-      <select>
-        <option>Kendall Zeledón</option>
-        <option>José Guillén</option>
-      </select>
+
+      <div class="searchable-select" (click)="$event.stopPropagation()">
+        <input type="text" [(ngModel)]="busquedaAprendiz" (focus)="mostrarAprendices = true"
+          placeholder="Seleccione o busque un aprendiz" autocomplete="off">
+
+        <div class="searchable-options" *ngIf="mostrarAprendices">
+          <button type="button" *ngFor="let aprendiz of aprendicesFiltrados" (click)="seleccionarAprendiz(aprendiz)">
+            {{ aprendiz }}
+          </button>
+        </div>
+      </div>
     </label>
 
     <label>
       Instructor
-      <select>
-        <option>Cristopher Durán</option>
-        <option>María Rodríguez</option>
-      </select>
+
+      <div class="searchable-select" (click)="$event.stopPropagation()">
+        <input type="text" [(ngModel)]="busquedaInstructor" (focus)="mostrarInstructores = true"
+          placeholder="Seleccione o busque un instructor" autocomplete="off">
+
+        <div class="searchable-options" *ngIf="mostrarInstructores">
+          <button type="button" *ngFor="let instructor of instructoresFiltrados"
+            (click)="seleccionarInstructor(instructor)">
+            {{ instructor }}
+          </button>
+        </div>
+      </div>
     </label>
 
     <label>
@@ -47,7 +62,8 @@
 
     <label>
       Observaciones
-      <input type="text" placeholder="Detalle de la evaluación">
+      <textarea rows="3" placeholder="Detalle de la evaluación">
+  </textarea>
     </label>
   </div>
 
@@ -63,31 +79,56 @@
   <table>
     <thead>
       <tr>
-        <th>Aprendiz</th>
-        <th>Evaluaciones</th>
-        <th>Promedio</th>
-        <th>Sesiones completadas</th>
-        <th>Índice de preparación</th>
-        <th>Estado</th>
+        <th (click)="ordenar('aprendiz')">Aprendiz ↕</th>
+        <th (click)="ordenar('evaluaciones')">Evaluaciones ↕</th>
+        <th (click)="ordenar('promedio')">Promedio ↕</th>
+        <th (click)="ordenar('sesionesCompletadas')">Sesiones completadas ↕</th>
+        <th (click)="ordenar('indicePreparacion')">Índice de preparación ↕</th>
+        <th (click)="ordenar('estado')">Estado ↕</th>
+      </tr>
+
+      <tr class="filter-row">
+        <th><input [(ngModel)]="filtros.aprendiz" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.evaluaciones" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.promedio" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.sesionesCompletadas" (ngModelChange)="paginaActual = 1" placeholder="Filtrar">
+        </th>
+        <th><input [(ngModel)]="filtros.indicePreparacion" (ngModelChange)="paginaActual = 1" placeholder="Filtrar">
+        </th>
+        <th><input [(ngModel)]="filtros.estado" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
       </tr>
     </thead>
+
     <tbody>
-      <tr>
-        <td>Kendall Zeledón</td>
-        <td>5</td>
-        <td>88</td>
-        <td>8</td>
-        <td>82%</td>
-        <td><span class="badge active">Preparado</span></td>
+      <tr *ngFor="let item of seguimientosPaginados">
+        <td>{{ item.aprendiz }}</td>
+        <td>{{ item.evaluaciones }}</td>
+        <td>{{ item.promedio }}</td>
+        <td>{{ item.sesionesCompletadas }}</td>
+        <td>{{ item.indicePreparacion }}%</td>
+        <td>
+          <span class="badge" [class.active]="item.estado === 'Preparado'"
+            [class.pending]="item.estado === 'En proceso'">
+            {{ item.estado }}
+          </span>
+        </td>
       </tr>
-      <tr>
-        <td>José Guillén</td>
-        <td>3</td>
-        <td>72</td>
-        <td>5</td>
-        <td>65%</td>
-        <td><span class="badge pending">En proceso</span></td>
+
+      <tr *ngIf="seguimientosFiltrados.length === 0">
+        <td colspan="6">No se encontraron registros.</td>
       </tr>
     </tbody>
   </table>
+
+  <div class="pagination" *ngIf="seguimientosFiltrados.length > 0">
+    <button type="button" class="secondary" (click)="paginaAnterior()" [disabled]="paginaActual === 1">
+      Anterior
+    </button>
+
+    <span>Página {{ paginaActual }} de {{ totalPaginas }}</span>
+
+    <button type="button" class="secondary" (click)="paginaSiguiente()" [disabled]="paginaActual === totalPaginas">
+      Siguiente
+    </button>
+  </div>
 </div>
