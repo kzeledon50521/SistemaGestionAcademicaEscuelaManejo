@@ -6,3 +6,5 @@
 **/obj/
 *.user
 *.suo
+*.dbmdl
+*.jfm
