@@ -17,6 +17,8 @@ builder.Services.AddScoped<InscripcionRepository>(_ =>
     new InscripcionRepository(connectionString));
 
 builder.Services.AddScoped<InscripcionService>();
+builder.Services.AddScoped<AgendaRepository>(_ => new AgendaRepository(connectionString));
+builder.Services.AddScoped<AgendaService>();
 
 builder.Services.AddCors(options =>
 {

@@ -59,8 +59,16 @@
     <Folder Include="dbo\" />
     <Folder Include="dbo\Tables\" />
     <Folder Include="dbo\Stored Procedures\" />
+    <Folder Include="Scripts\" />
+    <Folder Include="Tests\" />
   </ItemGroup>
   <ItemGroup>
+    <Build Include="dbo\Tables\ZONA.sql" />
+    <Build Include="dbo\Tables\ZONA_DIA_DISPONIBLE.sql" />
+    <Build Include="dbo\Tables\HORARIO_INSTRUCTOR.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Agenda_ConsultarZonas.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Agenda_ConsultarInstructores.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Agenda_ConsultarHorarios.sql" />
     <Build Include="dbo\Tables\USUARIO.sql" />
     <Build Include="dbo\Tables\SESION_PRACTICA.sql" />
     <Build Include="dbo\Tables\SEGUIMIENTO_PROGRESO.sql" />
@@ -85,5 +93,10 @@
     <Build Include="dbo\Stored Procedures\sp_Inscripcion_Consultar.sql" />
     <Build Include="dbo\Stored Procedures\sp_Inscripcion_ActualizarEstado.sql" />
     <Build Include="dbo\Stored Procedures\sp_CursoPaquete_Actualizar.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Scripts\PostDeployment.sql" />
+    <None Include="Tests\Agenda.Disponibilidad.Tests.ps1" />
+    <None Include="Tests\Agenda.Disponibilidad.Tests.sql" />
   </ItemGroup>
 </Project>
