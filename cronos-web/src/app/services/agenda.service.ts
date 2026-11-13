@@ -24,4 +24,9 @@ export class AgendaService {
     if (fecha) params = params.set('fecha', fecha);
     return this.http.get<HorarioDisponible[]>(`${this.apiUrl}/horarios`, { params });
   }
+
+  agendarHorario(idAprendiz: number, idHorario: number, zona: string): Observable<any> {
+    let params = new HttpParams().set('idHorario', idHorario).set('idAprendiz', idAprendiz).set('zona',zona);
+    return this.http.post(`${this.apiUrl}/agendar`, null,{ params });
+  }
 }

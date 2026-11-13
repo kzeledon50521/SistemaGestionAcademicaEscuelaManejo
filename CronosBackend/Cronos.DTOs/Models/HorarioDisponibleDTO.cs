@@ -8,5 +8,7 @@ namespace Cronos.DTOs.Models
         public string Zona { get; set; } = string.Empty;
         public string Fecha { get; set; } = string.Empty;
         public string Hora { get; set; } = string.Empty;
+
+        public string Estado { get; set; } = string.Empty;
     }
 }

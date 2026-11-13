@@ -52,5 +52,17 @@ namespace Cronos.BLL.Services
                 string.Equals(item.Nombre, zona.Trim(), StringComparison.OrdinalIgnoreCase));
             return seleccionada?.Nombre ?? throw new ArgumentException("La zona seleccionada no está disponible.");
         }
+
+        public async Task<IEnumerable<AgendarDTO>> AgendarSesionCompleta(int id_horario, int id_aprendiz, string zona)
+        {
+            if (id_horario <= 0)
+                throw new ArgumentException("Debe seleccionar un horario válido.");
+
+            if (id_aprendiz <= 0)
+                throw new ArgumentException("Debe especificar un aprendiz válido.");
+
+            
+            return await _repository.AgendarSesionCompleta(id_horario, id_aprendiz, zona);
+        }
     }
 }

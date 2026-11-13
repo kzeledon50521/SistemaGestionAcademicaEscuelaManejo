@@ -45,5 +45,36 @@ namespace Cronos.API.Controllers
                 return BadRequest(new { mensaje = ex.Message });
             }
         }
+
+        [HttpPost("agendar")]
+        public async Task<IActionResult> AgendarSesion(
+            [FromQuery] int idHorario,
+            [FromQuery] int idAprendiz,
+            [FromQuery] string zona)
+        {
+            try
+            {
+                var resultado = await _service.AgendarSesionCompleta(
+                    idHorario,
+                    idAprendiz,
+                    zona
+         
+                );
+
+                return Ok(new { mensaje = "Horario agendado correctamente" });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { mensaje = "Ocurrió un error interno al procesar la agenda.", detalle = ex.Message });
+            }
+        }
     }
 }

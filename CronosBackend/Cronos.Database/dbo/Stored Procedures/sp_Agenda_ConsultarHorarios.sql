@@ -15,7 +15,8 @@ BEGIN
            I.nombre_completo AS NombreInstructor,
            Z.nombre AS Zona,
            CONVERT(CHAR(10), H.fecha, 23) AS Fecha,
-           CONVERT(VARCHAR(16), H.hora) AS Hora
+           CONVERT(VARCHAR(16), H.hora) AS Hora,
+           H.estado
     FROM dbo.HORARIO_INSTRUCTOR H
     INNER JOIN dbo.INSTRUCTOR I ON I.id_instructor = H.id_instructor
     INNER JOIN dbo.ZONA Z ON Z.nombre = I.zona_trabajo
@@ -25,15 +26,16 @@ BEGIN
     WHERE I.id_instructor = @IdInstructor
       AND Z.nombre = @Zona
       AND I.estado = N'Activo'
-      AND H.estado = N'Activo'
+      AND H.estado <> N'Inactivo'
       AND (@Fecha IS NULL OR H.fecha = @Fecha)
       AND (H.fecha > CONVERT(DATE, @Ahora)
            OR H.fecha = CONVERT(DATE, @Ahora) AND H.hora > CONVERT(TIME(7), @Ahora))
       -- No hay regla aprobada para liberar cancelaciones: toda coincidencia bloquea.
-      AND NOT EXISTS (
-          SELECT 1 FROM dbo.SESION_PRACTICA S
-          WHERE S.id_instructor = H.id_instructor
-            AND S.fecha = H.fecha AND S.hora = H.hora
-      )
+      --AND NOT EXISTS (
+        --SELECT 1 FROM dbo.SESION_PRACTICA S
+          --WHERE S.id_instructor = H.id_instructor
+            --AND S.fecha = H.fecha AND S.hora = H.hora
+      --)
     ORDER BY H.fecha, H.hora;
 END
+GO

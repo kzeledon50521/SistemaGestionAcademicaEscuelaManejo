@@ -4,11 +4,11 @@
 </div>
 
 <div class="panel">
-  <h3>Consultar horarios disponibles</h3>
+  <h3>{{agendar ? 'Agendar clase' : 'Consultar horarios disponibles'}}</h3>
   <div class="form-grid">
     <label>
       Zona
-      <select [(ngModel)]="zona" (ngModelChange)="cambiarZona()">
+      <select [(ngModel)]="zona" (ngModelChange)="cambiarZona()" [disabled]="horario.idHorario !== 0">
         <option value="">Seleccione una zona</option>
         <option *ngFor="let item of zonas" [value]="item.nombre">{{ item.nombre }}</option>
       </select>
@@ -18,23 +18,23 @@
       <div class="searchable-select" (click)="$event.stopPropagation()">
         <input type="text" [(ngModel)]="busquedaInstructor" (ngModelChange)="buscarInstructor()"
           (focus)="mostrarInstructores = true" [disabled]="!zona || cargandoInstructores"
-          placeholder="Seleccione o busque un instructor" autocomplete="off">
+          placeholder="Seleccione o busque un instructor" autocomplete="off" [disabled]="horario.idHorario !== 0">
         <div class="searchable-options" *ngIf="mostrarInstructores && zona && !cargandoInstructores">
           <button type="button" *ngFor="let instructor of instructoresFiltrados"
-            (click)="seleccionarInstructor(instructor)">{{ instructor.nombreCompleto }}</button>
+            (click)="seleccionarInstructor(instructor)" >{{ instructor.nombreCompleto }}</button>
           <p *ngIf="instructoresFiltrados.length === 0">No se encontraron instructores.</p>
         </div>
       </div>
     </label>
     <label>
-      Fecha (opcional)
-      <input type="date" [(ngModel)]="fecha" (ngModelChange)="invalidarConsulta()" [min]="fechaMinima">
+      <span>Fecha <span *ngIf="!horario.fecha">(opcional)</span></span>
+      <input type="date" [(ngModel)]="fecha" (ngModelChange)="invalidarConsulta()" [min]="fechaMinima" [readonly]="horario.fecha">
     </label>
     <label>
-      Aprendiz (opcional)
+      <span>Aprendiz <span *ngIf="!horario.idHorario">(opcional)</span></span>
       <div class="searchable-select" (click)="$event.stopPropagation()">
         <input type="text" [(ngModel)]="busquedaAprendiz" (focus)="mostrarAprendices = true"
-          placeholder="Seleccione o busque un aprendiz" autocomplete="off">
+          placeholder="Seleccione o busque un aprendiz" autocomplete="off" [required]="horario.idHorario !== 0">
         <div class="searchable-options" *ngIf="mostrarAprendices">
           <button type="button" *ngFor="let aprendiz of aprendicesFiltrados"
             (click)="seleccionarAprendiz(aprendiz)">{{ aprendiz.nombreCompleto }}</button>
@@ -44,23 +44,23 @@
     </label>
     <label>
       Hora (reserva)
-      <input type="time" disabled>
+      <input [(ngModel)]="horario.hora" type="time" readonly>
     </label>
-    <label>
+    <!-- <label>
       Estado (reserva)
       <select disabled>
         <option>Programada</option>
         <option>Completada</option>
         <option>Cancelada</option>
       </select>
-    </label>
+    </label> -->
   </div>
   <p *ngIf="errorAprendices" role="status">{{ errorAprendices }}</p>
   <p *ngIf="cargandoInstructores" role="status">Cargando instructores...</p>
   <p *ngIf="mensaje" role="status" [class.mensaje-error]="tipoMensaje === 'error'">{{ mensaje }}</p>
   <div class="actions">
-    <button type="button" (click)="consultarHorarios()" [disabled]="cargandoHorarios || cargandoInstructores">
-      {{ cargandoHorarios ? 'Consultando...' : 'Consultar horarios' }}
+    <button type="button" (click)="horario.idHorario !== 0 ? agendarHorario() : consultarHorarios()" [disabled]="cargandoHorarios || cargandoInstructores">
+      {{ cargandoHorarios ? 'Consultando...' : (horario.idHorario !== 0 ? 'Agendar' : 'Consultar horarios')}}
     </button>
     <button type="button" class="secondary" (click)="limpiar()">Limpiar</button>
   </div>
@@ -76,12 +76,16 @@
           <th (click)="ordenar('zona')">Zona ↕</th>
           <th (click)="ordenar('fecha')">Fecha ↕</th>
           <th (click)="ordenar('hora')">Hora ↕</th>
+          <th (click)="ordenar('estado')">Estado ↕</th>
+          <th>Agendar</th>
         </tr>
         <tr class="filter-row">
           <th><input [(ngModel)]="filtros.nombreInstructor" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
           <th><input [(ngModel)]="filtros.zona" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
           <th><input [(ngModel)]="filtros.fecha" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
           <th><input [(ngModel)]="filtros.hora" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+          <th><input [(ngModel)]="filtros.estado" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -90,9 +94,15 @@
           <td>{{ horario.zona }}</td>
           <td>{{ horario.fecha }}</td>
           <td>{{ horario.hora }}</td>
+          <td>{{ horario.estado }}</td>
+          <td>
+          <button *ngIf="horario.estado === 'Activo'" type="button" class="action-button primary" (click)="llenarAgendar(horario)">
+            Seleccionar
+          </button>
+        </td>
         </tr>
         <tr *ngIf="horariosFiltrados.length === 0">
-          <td colspan="4">{{ cargandoHorarios ? 'Consultando horarios...' :
+          <td colspan="6">{{ cargandoHorarios ? 'Consultando horarios...' :
             consultaRealizada ? 'No se encontraron horarios para los filtros actuales.' :
             'Seleccione una zona y un instructor para consultar.' }}</td>
         </tr>

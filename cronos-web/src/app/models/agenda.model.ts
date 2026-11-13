@@ -15,4 +15,5 @@ export interface HorarioDisponible {
   zona: string;
   fecha: string;
   hora: string;
+  estado: string;
 }
