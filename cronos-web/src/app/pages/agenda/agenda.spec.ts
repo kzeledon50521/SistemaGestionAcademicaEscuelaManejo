@@ -9,7 +9,7 @@ const api = 'https://localhost:7260/api/Agenda';
 const instructor = { idInstructor: 11, nombreCompleto: 'Instructor de prueba' };
 const horario: HorarioDisponible = {
   idHorario: 1, idInstructor: 11, nombreInstructor: instructor.nombreCompleto,
-  zona: 'Cartago', fecha: '2099-01-03', hora: '08:00:00.0000000'
+  zona: 'Cartago', fecha: '2099-01-03', hora: '08:00:00.0000000', estado: 'Activo'
 };
 
 describe('Agenda: consulta de disponibilidad', () => {

@@ -16,7 +16,7 @@ BEGIN
         WHERE [id_instructor] = @id_instructor 
           AND [fecha] = @fecha 
           AND [hora] = @hora
-          -- Opcional: si quieres ignorar las canceladas, podrías agregar una condición de estado
+          AND [estado] <> N'Cancelada'
     )
     BEGIN
         RAISERROR('El instructor ya cuenta con una sesión agendada en esta fecha y hora.', 16, 1);

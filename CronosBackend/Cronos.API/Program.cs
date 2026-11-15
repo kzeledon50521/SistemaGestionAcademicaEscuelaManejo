@@ -18,7 +18,9 @@ builder.Services.AddScoped<InscripcionRepository>(_ =>
 
 builder.Services.AddScoped<InscripcionService>();
 builder.Services.AddScoped<AgendaRepository>(_ => new AgendaRepository(connectionString));
-builder.Services.AddScoped<AgendaService>();
+builder.Services.AddScoped<AgendaService>(sp => new AgendaService(
+    sp.GetRequiredService<AgendaRepository>(),
+    builder.Configuration.GetValue("Agenda:HorasMinimasCancelacion", 24)));
 
 builder.Services.AddCors(options =>
 {

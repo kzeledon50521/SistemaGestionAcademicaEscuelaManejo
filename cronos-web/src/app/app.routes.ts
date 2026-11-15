@@ -42,6 +42,16 @@ export const routes: Routes = [
           import('./pages/agenda/agenda').then(m => m.Agenda)
       },
       {
+        path: 'mis-sesiones',
+        loadComponent: () =>
+          import('./pages/mis-sesiones/mis-sesiones').then(m => m.MisSesiones)
+      },
+      {
+        path: 'agenda-instructor',
+        loadComponent: () =>
+          import('./pages/agenda-instructor/agenda-instructor').then(m => m.AgendaInstructor)
+      },
+      {
         path: 'evaluaciones',
         loadComponent: () =>
           import('./pages/evaluaciones/evaluaciones').then(m => m.Evaluaciones)
