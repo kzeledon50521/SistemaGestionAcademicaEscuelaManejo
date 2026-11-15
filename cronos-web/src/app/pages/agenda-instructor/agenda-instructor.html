@@ -1,0 +1,58 @@
+<div class="page-header">
+  <h2>Agenda del instructor</h2>
+  <p>Consulta las sesiones programadas por semana o por mes para organizar la jornada.</p>
+</div>
+
+<div class="panel">
+  <div class="form-grid">
+    <label>
+      Instructor
+      <select [(ngModel)]="idInstructor" (ngModelChange)="consultar()">
+        <option [ngValue]="0">Seleccione un instructor</option>
+        <option *ngFor="let i of instructores" [ngValue]="i.idInstructor">{{ i.nombreCompleto }}</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="actions toggle-vista">
+    <button type="button" class="secondary" [class.activo]="vista === 'semana'" (click)="cambiarVista('semana')">Semanal</button>
+    <button type="button" class="secondary" [class.activo]="vista === 'mes'" (click)="cambiarVista('mes')">Mensual</button>
+  </div>
+
+  <div class="actions" *ngIf="idInstructor">
+    <button type="button" class="secondary" (click)="desplazar(-1)">&laquo; Anterior</button>
+    <button type="button" class="secondary" (click)="irAHoy()">Hoy</button>
+    <button type="button" class="secondary" (click)="desplazar(1)">Siguiente &raquo;</button>
+    <span class="rango" *ngIf="agenda">{{ agenda.desde }} al {{ agenda.hasta }}</span>
+  </div>
+
+  <p *ngIf="mensaje" role="status" class="mensaje-error">{{ mensaje }}</p>
+</div>
+
+<div class="panel" *ngIf="idInstructor">
+  <h3>Sesiones programadas</h3>
+  <p *ngIf="cargando">Cargando agenda...</p>
+  <p *ngIf="agenda && !cargando && dias.length === 0">No tiene sesiones asignadas.</p>
+
+  <div class="dia" *ngFor="let dia of dias">
+    <h4>{{ dia.fecha }}</h4>
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Hora</th>
+            <th>Aprendiz</th>
+            <th>Zona</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let s of dia.sesiones">
+            <td>{{ s.hora.substring(0, 5) }}</td>
+            <td>{{ s.nombreAprendiz }}</td>
+            <td>{{ s.zona }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

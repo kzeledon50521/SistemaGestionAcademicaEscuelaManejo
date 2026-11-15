@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { HorarioDisponible, InstructorAgenda, Zona } from '../models/agenda.model';
+import { AgendaInstructor, HorarioDisponible, InstructorAgenda, Sesion, Zona } from '../models/agenda.model';
 
 @Injectable({ providedIn: 'root' })
 export class AgendaService {
@@ -28,5 +28,22 @@ export class AgendaService {
   agendarHorario(idAprendiz: number, idHorario: number, zona: string): Observable<any> {
     let params = new HttpParams().set('idHorario', idHorario).set('idAprendiz', idAprendiz).set('zona',zona);
     return this.http.post(`${this.apiUrl}/agendar`, null,{ params });
+  }
+
+  obtenerSesionesAprendiz(idAprendiz: number): Observable<Sesion[]> {
+    return this.http.get<Sesion[]>(`${this.apiUrl}/sesiones`, {
+      params: new HttpParams().set('idAprendiz', idAprendiz)
+    });
+  }
+
+  cancelarSesion(idSesion: number, idAprendiz: number): Observable<any> {
+    const params = new HttpParams().set('idSesion', idSesion).set('idAprendiz', idAprendiz);
+    return this.http.post(`${this.apiUrl}/cancelar`, null, { params });
+  }
+
+  obtenerAgendaInstructor(idInstructor: number, vista: 'semana' | 'mes', fecha: string): Observable<AgendaInstructor> {
+    let params = new HttpParams().set('idInstructor', idInstructor).set('vista', vista);
+    if (fecha) params = params.set('fecha', fecha);
+    return this.http.get<AgendaInstructor>(`${this.apiUrl}/agenda-instructor`, { params });
   }
 }

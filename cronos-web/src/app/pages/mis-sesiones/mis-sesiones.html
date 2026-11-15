@@ -1,0 +1,47 @@
+<div class="page-header">
+  <h2>Mis sesiones</h2>
+  <p>Consulta tus sesiones agendadas y cancela las que no puedas asistir.</p>
+</div>
+
+<div class="panel">
+  <div class="form-grid">
+    <label>
+      Aprendiz
+      <select [(ngModel)]="idAprendiz" (ngModelChange)="cambiarAprendiz()">
+        <option [ngValue]="0">Seleccione un aprendiz</option>
+        <option *ngFor="let a of aprendices" [ngValue]="a.idAprendiz">{{ a.nombreCompleto }}</option>
+      </select>
+    </label>
+  </div>
+
+  <p *ngIf="mensaje" role="status" [class.mensaje-error]="tipoMensaje === 'error'">{{ mensaje }}</p>
+</div>
+
+<div class="panel" *ngIf="idAprendiz">
+  <h3>Sesiones agendadas</h3>
+  <p *ngIf="cargando">Cargando sesiones...</p>
+  <p *ngIf="consultaRealizada && sesiones.length === 0">No tiene sesiones agendadas.</p>
+
+  <div class="table-container" *ngIf="sesiones.length > 0">
+    <table>
+      <thead>
+        <tr>
+          <th>Fecha</th>
+          <th>Hora</th>
+          <th>Instructor</th>
+          <th>Zona</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let s of sesiones">
+          <td>{{ s.fecha }}</td>
+          <td>{{ s.hora.substring(0, 5) }}</td>
+          <td>{{ s.nombreInstructor }}</td>
+          <td>{{ s.zona }}</td>
+          <td><button type="button" class="secondary" (click)="cancelar(s)">Cancelar sesión</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -69,6 +69,9 @@
     <Build Include="dbo\Stored Procedures\sp_Agenda_ConsultarZonas.sql" />
     <Build Include="dbo\Stored Procedures\sp_Agenda_ConsultarInstructores.sql" />
     <Build Include="dbo\Stored Procedures\sp_Agenda_ConsultarHorarios.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Sesion_ConsultarPorAprendiz.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Sesion_ConsultarPorInstructor.sql" />
+    <Build Include="dbo\Stored Procedures\sp_Sesion_Cancelar.sql" />
     <Build Include="dbo\Tables\USUARIO.sql" />
     <Build Include="dbo\Tables\SESION_PRACTICA.sql" />
     <Build Include="dbo\Tables\SEGUIMIENTO_PROGRESO.sql" />

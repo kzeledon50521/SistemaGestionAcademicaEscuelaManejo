@@ -93,7 +93,7 @@
           <td>{{ horario.nombreInstructor }}</td>
           <td>{{ horario.zona }}</td>
           <td>{{ horario.fecha }}</td>
-          <td>{{ horario.hora }}</td>
+          <td>{{ horario.hora.substring(0, 5) }}</td>
           <td>{{ horario.estado }}</td>
           <td>
           <button *ngIf="horario.estado === 'Activo'" type="button" class="action-button primary" (click)="llenarAgendar(horario)">

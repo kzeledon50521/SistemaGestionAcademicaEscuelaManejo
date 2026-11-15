@@ -46,6 +46,57 @@ namespace Cronos.API.Controllers
             }
         }
 
+        [HttpGet("sesiones")]
+        public async Task<IActionResult> ObtenerSesionesAprendiz([FromQuery] int idAprendiz)
+        {
+            try
+            {
+                return Ok(await _service.ObtenerSesionesAprendiz(idAprendiz));
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
+        }
+
+        [HttpPost("cancelar")]
+        public async Task<IActionResult> CancelarSesion([FromQuery] int idSesion, [FromQuery] int idAprendiz)
+        {
+            try
+            {
+                await _service.CancelarSesion(idSesion, idAprendiz);
+                return Ok(new { mensaje = "Sesión cancelada correctamente." });
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { mensaje = "Ocurrió un error interno al cancelar la sesión.", detalle = ex.Message });
+            }
+        }
+
+        [HttpGet("agenda-instructor")]
+        public async Task<IActionResult> ObtenerAgendaInstructor(
+            [FromQuery] int idInstructor,
+            [FromQuery] string? vista,
+            [FromQuery] DateOnly? fecha)
+        {
+            try
+            {
+                return Ok(await _service.ObtenerAgendaInstructor(idInstructor, vista, fecha));
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(new { mensaje = ex.Message });
+            }
+        }
+
         [HttpPost("agendar")]
         public async Task<IActionResult> AgendarSesion(
             [FromQuery] int idHorario,

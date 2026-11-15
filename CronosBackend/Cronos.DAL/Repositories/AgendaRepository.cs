@@ -37,6 +37,41 @@ namespace Cronos.DAL.Repositories
 
         
 
+        public async Task<IEnumerable<SesionDTO>> ObtenerSesionesAprendiz(int idAprendiz)
+        {
+            using var connection = new SqlConnection(_connectionString);
+            return await connection.QueryAsync<SesionDTO>("dbo.sp_Sesion_ConsultarPorAprendiz",
+                new { IdAprendiz = idAprendiz }, commandType: CommandType.StoredProcedure);
+        }
+
+        public async Task<IEnumerable<SesionDTO>> ObtenerSesionesInstructor(int idInstructor, DateOnly desde, DateOnly hasta)
+        {
+            using var connection = new SqlConnection(_connectionString);
+            var parametros = new
+            {
+                IdInstructor = idInstructor,
+                FechaInicio = desde.ToDateTime(TimeOnly.MinValue),
+                FechaFin = hasta.ToDateTime(TimeOnly.MinValue)
+            };
+            return await connection.QueryAsync<SesionDTO>("dbo.sp_Sesion_ConsultarPorInstructor",
+                parametros, commandType: CommandType.StoredProcedure);
+        }
+
+        public async Task CancelarSesion(int idSesion, int idAprendiz)
+        {
+            using var connection = new SqlConnection(_connectionString);
+            try
+            {
+                await connection.ExecuteAsync("dbo.sp_Sesion_Cancelar",
+                    new { IdSesion = idSesion, IdAprendiz = idAprendiz },
+                    commandType: CommandType.StoredProcedure);
+            }
+            catch (SqlException ex) when (ex.Number == 51001)
+            {
+                throw new InvalidOperationException("La sesión no existe, no pertenece al aprendiz o ya fue cancelada.");
+            }
+        }
+
         public async Task<IEnumerable<AgendarDTO>> AgendarSesionCompleta(int id_horario, int id_aprendiz, string zona)
         {
             using var connection = new SqlConnection(_connectionString);
