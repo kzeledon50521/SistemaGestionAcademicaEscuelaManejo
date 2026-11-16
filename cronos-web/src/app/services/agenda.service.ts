@@ -5,7 +5,7 @@ import { AgendaInstructor, HorarioDisponible, InstructorAgenda, Sesion, Zona } f
 
 @Injectable({ providedIn: 'root' })
 export class AgendaService {
-  private apiUrl = 'https://localhost:7260/api/Agenda';
+  private apiUrl = 'https://cronos-api-snk9.onrender.com/api/Agenda';
 
   constructor(private http: HttpClient) {}
 

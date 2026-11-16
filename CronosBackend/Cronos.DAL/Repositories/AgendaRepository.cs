@@ -1,7 +1,7 @@
+
 using Cronos.DTOs.Models;
 using Dapper;
-using Microsoft.Data.SqlClient;
-using System.Data;
+using Npgsql;
 
 namespace Cronos.DAL.Repositories
 {
@@ -16,140 +16,186 @@ namespace Cronos.DAL.Repositories
 
         public async Task<IEnumerable<ZonaDTO>> ObtenerZonas()
         {
-            using var connection = new SqlConnection(_connectionString);
-            return await connection.QueryAsync<ZonaDTO>("dbo.sp_Agenda_ConsultarZonas", commandType: CommandType.StoredProcedure);
+            using var connection = new NpgsqlConnection(_connectionString);
+
+            return await connection.QueryAsync<ZonaDTO>(
+                "SELECT * FROM dbo.sp_agenda_consultarzonas();");
         }
 
         public async Task<IEnumerable<InstructorAgendaDTO>> ObtenerInstructores(string zona)
         {
-            using var connection = new SqlConnection(_connectionString);
-            return await connection.QueryAsync<InstructorAgendaDTO>("dbo.sp_Agenda_ConsultarInstructores",
-                new { Zona = zona }, commandType: CommandType.StoredProcedure);
+            using var connection = new NpgsqlConnection(_connectionString);
+
+            return await connection.QueryAsync<InstructorAgendaDTO>(
+                "SELECT * FROM dbo.sp_agenda_consultarinstructores(CAST(@Zona AS varchar));",
+                new { Zona = zona });
         }
 
-        public async Task<IEnumerable<HorarioDisponibleDTO>> ObtenerHorarios(string zona, int idInstructor, DateOnly? fecha)
+        public async Task<IEnumerable<HorarioDisponibleDTO>> ObtenerHorarios(
+            string zona, int idInstructor, DateOnly? fecha)
         {
-            using var connection = new SqlConnection(_connectionString);
-            var parametros = new { Zona = zona, IdInstructor = idInstructor, Fecha = fecha?.ToDateTime(TimeOnly.MinValue) };
-            return await connection.QueryAsync<HorarioDisponibleDTO>("dbo.sp_Agenda_ConsultarHorarios",
-                parametros, commandType: CommandType.StoredProcedure);
-        }
+            using var connection = new NpgsqlConnection(_connectionString);
 
-        
+            var parametros = new
+            {
+                Zona = zona,
+                IdInstructor = idInstructor,
+                Fecha = fecha?.ToDateTime(TimeOnly.MinValue)
+            };
+
+            return await connection.QueryAsync<HorarioDisponibleDTO>(
+                @"SELECT * FROM dbo.sp_agenda_consultarhorarios(
+                    CAST(@Zona AS varchar),
+                    @IdInstructor,
+                    CAST(@Fecha AS date));",
+                parametros);
+        }
 
         public async Task<IEnumerable<SesionDTO>> ObtenerSesionesAprendiz(int idAprendiz)
         {
-            using var connection = new SqlConnection(_connectionString);
-            return await connection.QueryAsync<SesionDTO>("dbo.sp_Sesion_ConsultarPorAprendiz",
-                new { IdAprendiz = idAprendiz }, commandType: CommandType.StoredProcedure);
+            using var connection = new NpgsqlConnection(_connectionString);
+
+            return await connection.QueryAsync<SesionDTO>(
+                "SELECT * FROM dbo.sp_sesion_consultarporaprendiz(@IdAprendiz);",
+                new { IdAprendiz = idAprendiz });
         }
 
-        public async Task<IEnumerable<SesionDTO>> ObtenerSesionesInstructor(int idInstructor, DateOnly desde, DateOnly hasta)
+        public async Task<IEnumerable<SesionDTO>> ObtenerSesionesInstructor(
+            int idInstructor, DateOnly desde, DateOnly hasta)
         {
-            using var connection = new SqlConnection(_connectionString);
+            using var connection = new NpgsqlConnection(_connectionString);
+
             var parametros = new
             {
                 IdInstructor = idInstructor,
                 FechaInicio = desde.ToDateTime(TimeOnly.MinValue),
                 FechaFin = hasta.ToDateTime(TimeOnly.MinValue)
             };
-            return await connection.QueryAsync<SesionDTO>("dbo.sp_Sesion_ConsultarPorInstructor",
-                parametros, commandType: CommandType.StoredProcedure);
+
+            return await connection.QueryAsync<SesionDTO>(
+                @"SELECT * FROM dbo.sp_sesion_consultarporinstructor(
+                    @IdInstructor,
+                    CAST(@FechaInicio AS date),
+                    CAST(@FechaFin AS date));",
+                parametros);
         }
 
         public async Task CancelarSesion(int idSesion, int idAprendiz)
         {
-            using var connection = new SqlConnection(_connectionString);
+            using var connection = new NpgsqlConnection(_connectionString);
+
             try
             {
-                await connection.ExecuteAsync("dbo.sp_Sesion_Cancelar",
-                    new { IdSesion = idSesion, IdAprendiz = idAprendiz },
-                    commandType: CommandType.StoredProcedure);
+                var resultado = await connection.ExecuteScalarAsync<int>(
+                    "SELECT dbo.sp_sesion_cancelar(@IdSesion, @IdAprendiz);",
+                    new
+                    {
+                        IdSesion = idSesion,
+                        IdAprendiz = idAprendiz
+                    });
+
+                if (resultado != 1)
+                {
+                    throw new InvalidOperationException(
+                        "La sesión no existe, no pertenece al aprendiz o ya fue cancelada.");
+                }
             }
-            catch (SqlException ex) when (ex.Number == 51001)
+            catch (PostgresException ex) when (ex.SqlState == "P0001")
             {
-                throw new InvalidOperationException("La sesión no existe, no pertenece al aprendiz o ya fue cancelada.");
+                throw new InvalidOperationException(
+                    "La sesión no existe, no pertenece al aprendiz o ya fue cancelada.", ex);
             }
         }
 
-        public async Task<IEnumerable<AgendarDTO>> AgendarSesionCompleta(int id_horario, int id_aprendiz, string zona)
+        public async Task<IEnumerable<AgendarDTO>> AgendarSesionCompleta(
+            int id_horario, int id_aprendiz, string zona)
         {
-            using var connection = new SqlConnection(_connectionString);
+            using var connection = new NpgsqlConnection(_connectionString);
             await connection.OpenAsync();
 
-            using var transaction = connection.BeginTransaction();
+            using var transaction = await connection.BeginTransactionAsync();
 
             try
             {
-             
-                var resultadoHorario = await connection.QueryAsync<int>(
-                    "dbo.sp_AgendarHorarioInstructor",
-                    new { id_horario },
-                    transaction: transaction,
-                    commandType: CommandType.StoredProcedure);
-
-                int respuestaHorario = resultadoHorario.FirstOrDefault();
+                var respuestaHorario = await connection.ExecuteScalarAsync<int>(
+                    "SELECT dbo.sp_agendarhorarioinstructor(@IdHorario);",
+                    new { IdHorario = id_horario },
+                    transaction: transaction);
 
                 if (respuestaHorario != 1)
                 {
-                    throw new InvalidOperationException("No se pudo actualizar el estado del horario del instructor.");
+                    throw new InvalidOperationException(
+                        "No se pudo actualizar el estado del horario del instructor.");
                 }
 
-        
-                var horarioInfo = await connection.QueryFirstOrDefaultAsync<dynamic>(
-                    @"SELECT id_instructor, fecha, hora
-                      FROM dbo.HORARIO_INSTRUCTOR 
-                      WHERE id_horario = @id_horario",
-                    new { id_horario },
+                var horarioInfo = await connection.QuerySingleOrDefaultAsync<HorarioInfo>(
+                    @"SELECT
+                        id_instructor AS IdInstructor,
+                        fecha::text AS Fecha,
+                        hora::text AS Hora
+                      FROM dbo.horario_instructor
+                      WHERE id_horario = @IdHorario;",
+                    new { IdHorario = id_horario },
                     transaction: transaction);
 
                 if (horarioInfo == null)
                 {
-                    throw new InvalidOperationException("No se encontró información para el horario especificado.");
+                    throw new InvalidOperationException(
+                        "No se encontró información para el horario especificado.");
                 }
 
-                
-                await connection.ExecuteAsync(
-                    "dbo.sp_AgendarSesionPráctica",
+                var resultadoSesion = await connection.ExecuteScalarAsync<int>(
+                    @"SELECT dbo.sp_agendarsesionpractica(
+                        @IdAprendiz,
+                        h.id_instructor,
+                        h.fecha,
+                        h.hora,
+                        CAST(@Zona AS varchar),
+                        CAST(@Estado AS varchar))
+                      FROM dbo.horario_instructor h
+                      WHERE h.id_horario = @IdHorario;",
                     new
                     {
-                        id_aprendiz = id_aprendiz,
-                        id_instructor = (int)horarioInfo.id_instructor,
-                        fecha = (DateTime)horarioInfo.fecha,
-                        hora = (TimeSpan)horarioInfo.hora,
-                        zona = zona,
-                        estado = "Agendada"
+                        IdHorario = id_horario,
+                        IdAprendiz = id_aprendiz,
+                        Zona = zona,
+                        Estado = "Agendada"
                     },
-                    transaction: transaction,
-                    commandType: CommandType.StoredProcedure);
+                    transaction: transaction);
 
-           
+                if (resultadoSesion <= 0)
+                {
+                    throw new InvalidOperationException(
+                        "No se pudo registrar la sesión práctica.");
+                }
+
                 await transaction.CommitAsync();
 
-        
-                var detalleAgendado = new List<AgendarDTO>
+                return new List<AgendarDTO>
                 {
                     new AgendarDTO
                     {
                         IdHorario = id_horario,
-                        IdInstructor = (int)horarioInfo.id_instructor,
+                        IdInstructor = horarioInfo.IdInstructor,
                         IdAprendiz = id_aprendiz,
-                        Zona = horarioInfo.zona,
-                        Fecha = ((DateTime)horarioInfo.fecha).ToString("yyyy-MM-dd"),
-                        Hora = horarioInfo.hora.ToString()
+                        Zona = zona,
+                        Fecha = horarioInfo.Fecha,
+                        Hora = horarioInfo.Hora
                     }
                 };
-
-                return detalleAgendado;
             }
-            catch (Exception)
+            catch
             {
-               
                 await transaction.RollbackAsync();
                 throw;
             }
         }
 
-
+        private sealed class HorarioInfo
+        {
+            public int IdInstructor { get; set; }
+            public string Fecha { get; set; } = string.Empty;
+            public string Hora { get; set; } = string.Empty;
+        }
     }
 }
