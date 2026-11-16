@@ -102,3 +102,25 @@ td {
   background: #fef3c7;
   color: #92400e;
 }
+
+.filter-row th {
+  padding: 6px;
+}
+
+.filter-row input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}

@@ -9,13 +9,22 @@
   <div class="form-grid">
     <label>
       Aprendiz
-      <select [(ngModel)]="inscripcion.idAprendiz">
-        <option [ngValue]="0">Seleccione un aprendiz</option>
 
-        <option *ngFor="let aprendiz of aprendices" [ngValue]="aprendiz.idAprendiz">
-          {{ aprendiz.nombreCompleto }}
-        </option>
-      </select>
+      <div class="searchable-select" (click)="$event.stopPropagation()">
+        <input type="text" [(ngModel)]="busquedaAprendiz" (focus)="mostrarAprendices = true" (input)="buscarAprendiz()"
+          placeholder="Seleccione o busque un aprendiz" autocomplete="off">
+
+        <div class="searchable-options" *ngIf="mostrarAprendices">
+          <button type="button" *ngFor="let aprendiz of aprendicesFiltradosSelector"
+            (click)="seleccionarAprendiz(aprendiz)">
+            {{ aprendiz.nombreCompleto }}
+          </button>
+
+          <div class="searchable-empty" *ngIf="aprendicesFiltradosSelector.length === 0">
+            No se encontraron aprendices.
+          </div>
+        </div>
+      </div>
     </label>
 
     <label>
@@ -51,16 +60,24 @@
   <table>
     <thead>
       <tr>
-        <th>Aprendiz</th>
-        <th>Curso / Paquete</th>
-        <th>Fecha solicitud</th>
-        <th>Estado</th>
+        <th (click)="ordenar('nombreAprendiz')">Aprendiz ↕</th>
+        <th (click)="ordenar('nombreCurso')">Curso / Paquete ↕</th>
+        <th (click)="ordenar('fechaSolicitud')">Fecha solicitud ↕</th>
+        <th (click)="ordenar('estadoSolicitud')">Estado ↕</th>
         <th>Acciones</th>
+      </tr>
+
+      <tr class="filter-row">
+        <th><input [(ngModel)]="filtros.nombreAprendiz" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.nombreCurso" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.fechaSolicitud" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.estadoSolicitud" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th></th>
       </tr>
     </thead>
 
     <tbody>
-      <tr *ngFor="let solicitud of inscripciones">
+      <tr *ngFor="let solicitud of inscripcionesPaginadas">
         <td>{{ solicitud.nombreAprendiz }}</td>
         <td>{{ solicitud.nombreCurso }}</td>
         <td>{{ solicitud.fechaSolicitud | date:'dd/MM/yyyy' }}</td>
@@ -72,20 +89,34 @@
         </td>
         <td>
           <ng-container *ngIf="solicitud.estadoSolicitud === 'Pendiente'">
-            <button type="button" (click)="aprobar(solicitud)">
-              Aprobar
-            </button>
+            <div class="table-actions">
+              <button type="button" class="action-button primary" (click)="aprobar(solicitud)">
+                Aprobar
+              </button>
 
-            <button type="button" class="secondary" (click)="rechazar(solicitud)">
-              Rechazar
-            </button>
+              <button type="button" class="action-button danger" (click)="rechazar(solicitud)">
+                Rechazar
+              </button>
+            </div>
           </ng-container>
         </td>
       </tr>
 
-      <tr *ngIf="inscripciones.length === 0">
+      <tr *ngIf="inscripcionesFiltradas.length === 0">
         <td colspan="5">No se encontraron solicitudes.</td>
       </tr>
     </tbody>
   </table>
+
+  <div class="pagination" *ngIf="inscripcionesFiltradas.length > 0">
+    <button type="button" class="secondary" (click)="paginaAnterior()" [disabled]="paginaActual === 1">
+      Anterior
+    </button>
+
+    <span>Página {{ paginaActual }} de {{ totalPaginas }}</span>
+
+    <button type="button" class="secondary" (click)="paginaSiguiente()" [disabled]="paginaActual === totalPaginas">
+      Siguiente
+    </button>
+  </div>
 </div>

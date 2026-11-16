@@ -62,36 +62,69 @@
   <table>
     <thead>
       <tr>
-        <th>Nombre</th>
-        <th>Descripción</th>
-        <th>Vehículo</th>
-        <th>Duración</th>
-        <th>Precio</th>
-        <th>Estado</th>
+        <th (click)="ordenar('nombre')">Nombre ↕</th>
+        <th (click)="ordenar('descripcion')">Descripción ↕</th>
+        <th (click)="ordenar('tipoVehiculo')">Vehículo ↕</th>
+        <th (click)="ordenar('duracionHoras')">Duración ↕</th>
+        <th (click)="ordenar('precio')">Precio ↕</th>
+        <th (click)="ordenar('estado')">Estado ↕</th>
         <th>Acciones</th>
       </tr>
+
+      <tr class="filter-row">
+        <th><input [(ngModel)]="filtros.nombre" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.descripcion" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.tipoVehiculo" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.duracionHoras" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.precio" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.estado" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th></th>
+      </tr>
     </thead>
+
     <tbody>
-      <tr *ngFor="let item of cursos">
+      <tr *ngFor="let item of cursosPaginados">
         <td>{{ item.nombre }}</td>
         <td>{{ item.descripcion }}</td>
         <td>{{ item.tipoVehiculo }}</td>
         <td>{{ item.duracionHoras }} h</td>
-        <td>₡{{ item.precio }}</td>
-        <td><span class="badge" [class.active]="item.estado === 'Activo'"
-            [class.inactive]="item.estado === 'Inactivo'">{{ item.estado }}</span></td>
+        <td>₡{{ item.precio | number:'1.2-2' }}</td>
         <td>
-          <button type="button" class="edit-button" (click)="editarCurso(item)">Editar</button>
-          <button *ngIf="item.estado === 'Activo'" type="button" class="danger"
-            (click)="deshabilitarCurso(item)">Deshabilitar</button>
+          <span class="badge" [class.active]="item.estado === 'Activo'" [class.inactive]="item.estado === 'Inactivo'">
+            {{ item.estado }}
+          </span>
+        </td>
+        <td>
+          <div class="table-actions">
+            <button type="button" class="action-button primary" (click)="editarCurso(item)">
+              Editar
+            </button>
+
+            <button *ngIf="item.estado === 'Activo'" type="button" class="action-button danger"
+              (click)="deshabilitarCurso(item)">
+              Deshabilitar
+            </button>
+          </div>
         </td>
       </tr>
 
-      <tr *ngIf="cursos.length === 0">
+      <tr *ngIf="cursosFiltrados.length === 0">
         <td colspan="7">No hay cursos registrados.</td>
       </tr>
     </tbody>
   </table>
+
+  <div class="pagination" *ngIf="cursosFiltrados.length > 0">
+    <button type="button" class="secondary" (click)="paginaAnterior()" [disabled]="paginaActual === 1">
+      Anterior
+    </button>
+
+    <span>Página {{ paginaActual }} de {{ totalPaginas }}</span>
+
+    <button type="button" class="secondary" (click)="paginaSiguiente()" [disabled]="paginaActual === totalPaginas">
+      Siguiente
+    </button>
+  </div>
 
   <div *ngIf="mensajeListado" class="mensaje" [class.exito]="tipoMensajeListado === 'exito'"
     [class.error]="tipoMensajeListado === 'error'">
