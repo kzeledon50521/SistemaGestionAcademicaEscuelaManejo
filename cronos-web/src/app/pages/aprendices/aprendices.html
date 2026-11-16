@@ -59,31 +59,62 @@
 
 <div class="panel">
   <h3>Aprendices registrados</h3>
-  <input type="text" [(ngModel)]="busqueda" placeholder="Buscar por nombre o cédula">
+
+  <div class="search-field">
+    <input type="text" [(ngModel)]="busqueda" (ngModelChange)="paginaActual = 1"
+      placeholder="Buscar por nombre o cédula">
+  </div>
 
   <table>
     <thead>
       <tr>
-        <th>Cédula</th>
-        <th>Nombre</th>
-        <th>Teléfono</th>
-        <th>Zona</th>
-        <th>Estado</th>
-        <th>Progreso</th>
+        <th (click)="ordenar('cedula')">Cédula ↕</th>
+        <th (click)="ordenar('nombreCompleto')">Nombre ↕</th>
+        <th (click)="ordenar('telefono')">Teléfono ↕</th>
+        <th (click)="ordenar('zona')">Zona ↕</th>
+        <th (click)="ordenar('estado')">Estado ↕</th>
+        <th (click)="ordenar('progreso')">Progreso ↕</th>
+      </tr>
+
+      <tr class="filter-row">
+        <th><input [(ngModel)]="filtros.cedula" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.nombreCompleto" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.telefono" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.zona" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.estado" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.progreso" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
       </tr>
     </thead>
+
     <tbody>
-      <tr *ngFor="let item of aprendicesFiltrados">
+      <tr *ngFor="let item of aprendicesPaginados">
         <td>{{ item.cedula }}</td>
         <td>{{ item.nombreCompleto }}</td>
         <td>{{ item.telefono }}</td>
         <td>{{ item.zona }}</td>
-        <td><span class="badge" [class.active]="item.estado === 'Activo'" [class.inactive]="item.estado === 'Inactivo'">{{ item.estado }}</span></td>
+        <td>
+          <span class="badge" [class.active]="item.estado === 'Activo'" [class.inactive]="item.estado === 'Inactivo'">
+            {{ item.estado }}
+          </span>
+        </td>
         <td>{{ item.progreso || 0 }}%</td>
       </tr>
+
       <tr *ngIf="aprendicesFiltrados.length === 0">
         <td colspan="6">No se encontraron registros.</td>
       </tr>
     </tbody>
   </table>
+
+  <div class="pagination" *ngIf="aprendicesFiltrados.length > 0">
+    <button type="button" class="secondary" (click)="paginaAnterior()" [disabled]="paginaActual === 1">
+      Anterior
+    </button>
+
+    <span>Página {{ paginaActual }} de {{ totalPaginas }}</span>
+
+    <button type="button" class="secondary" (click)="paginaSiguiente()" [disabled]="paginaActual === totalPaginas">
+      Siguiente
+    </button>
+  </div>
 </div>

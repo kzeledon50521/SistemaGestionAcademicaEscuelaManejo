@@ -41,28 +41,56 @@
   <table>
     <thead>
       <tr>
-        <th>Elemento</th>
-        <th>Detalle</th>
-        <th>Promedio</th>
-        <th>Estado</th>
-        <th>Observación</th>
+        <th (click)="ordenar('elemento')">Elemento ↕</th>
+        <th (click)="ordenar('detalle')">Detalle ↕</th>
+        <th (click)="ordenar('promedio')">Promedio ↕</th>
+        <th (click)="ordenar('estado')">Estado ↕</th>
+        <th (click)="ordenar('observacion')">Observación ↕</th>
+      </tr>
+
+      <tr class="filter-row">
+        <th><input [(ngModel)]="filtros.elemento" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.detalle" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.promedio" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.estado" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
+        <th><input [(ngModel)]="filtros.observacion" (ngModelChange)="paginaActual = 1" placeholder="Filtrar"></th>
       </tr>
     </thead>
+
     <tbody>
-      <tr>
-        <td>Kendall Zeledón</td>
-        <td>Seguimiento de aprendiz</td>
-        <td>88</td>
-        <td><span class="badge active">Adecuado</span></td>
-        <td>Presenta buen avance para el examen práctico.</td>
+      <tr *ngFor="let item of resultadosPaginados">
+        <td>{{ item.elemento }}</td>
+        <td>{{ item.detalle }}</td>
+        <td>{{ item.promedio }}</td>
+        <td>
+          <span class="badge"
+            [class.active]="item.estado === 'Adecuado'"
+            [class.pending]="item.estado === 'En proceso'">
+            {{ item.estado }}
+          </span>
+        </td>
+        <td>{{ item.observacion }}</td>
       </tr>
-      <tr>
-        <td>José Guillén</td>
-        <td>Seguimiento de aprendiz</td>
-        <td>72</td>
-        <td><span class="badge pending">En proceso</span></td>
-        <td>Requiere reforzar maniobras y control del vehículo.</td>
+
+      <tr *ngIf="resultadosFiltrados.length === 0">
+        <td colspan="5">No se encontraron resultados.</td>
       </tr>
     </tbody>
   </table>
+
+  <div class="pagination" *ngIf="resultadosFiltrados.length > 0">
+    <button type="button" class="secondary"
+      (click)="paginaAnterior()"
+      [disabled]="paginaActual === 1">
+      Anterior
+    </button>
+
+    <span>Página {{ paginaActual }} de {{ totalPaginas }}</span>
+
+    <button type="button" class="secondary"
+      (click)="paginaSiguiente()"
+      [disabled]="paginaActual === totalPaginas">
+      Siguiente
+    </button>
+  </div>
 </div>

@@ -123,3 +123,36 @@ td {
 .edit-button {
   padding: 6px 12px;
 }
+
+.search-field {
+  width: 100%;
+  max-width: 360px;
+  margin: 16px 0;
+}
+
+.search-field input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.filter-row th {
+  padding: 6px;
+}
+
+.filter-row input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
